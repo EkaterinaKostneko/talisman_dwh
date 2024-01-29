@@ -36,10 +36,10 @@ with DAG(dag_id, default_args=default_args, schedule_interval='30 19 * * *', cat
     t_truncate = run_sql(
         script='truncate_basic.sql',
         task_id='truncate_stg_dwh')
-    #t_load_mart = run_sql(script='mart_sprav_test.sql', task_id='load_mart')
+    t_core_jourdate = run_sql(script='core_1sjourn.sql', task_id='trsfrm_jrnldate')
     t_finish_load = finish_load()
     # t_get_load_id = get_load_id()
     t_get_load_params = get_load_params()
 
-    t_get_load_params >> t_truncate >> [t_extract_sql('_1sconst'), t_extract_sql('_1sjourn')] >> t_finish_load
+    t_get_load_params >> t_truncate >> [t_extract_sql('_1sconst'), t_extract_sql('_1sjourn')] >> t_core_jourdate >> t_finish_load
 

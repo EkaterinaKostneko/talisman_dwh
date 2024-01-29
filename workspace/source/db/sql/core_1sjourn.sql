@@ -1,6 +1,6 @@
-TRUNCATE TABLE ods._1sjourn;
+TRUNCATE TABLE core._1sjourn;
 
-INSERT INTO ods._1sjourn
+INSERT INTO core._1sjourn
 (	
 	row_id,
 	idjournal,

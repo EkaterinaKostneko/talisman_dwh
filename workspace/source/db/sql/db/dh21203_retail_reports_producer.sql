@@ -56,6 +56,6 @@ SELECT
 	SP21466 ,
 	SP475
 FROM dh21203 Doc
-left join _1SJOURN  
-on Doc.iddoc = _1SJOURN.iddoc 
-where CAST (SUBSTRING(_1SJOURN.DATE_TIME_IDDOC, 1, 8) as date) between '01.10.2023' and '31.10.2023';
+--left join _1SJOURN
+--on Doc.iddoc = _1SJOURN.iddoc
+--where CAST (SUBSTRING(_1SJOURN.DATE_TIME_IDDOC, 1, 8) as date) between '01.10.2023' and '31.10.2023';
