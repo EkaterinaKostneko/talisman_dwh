@@ -87,8 +87,7 @@ CREATE TABLE stg_dwh.dt21203_retail_reports (
     SP25083 numeric(9,3)  NULL,
     SP25084 numeric(9,3)  NULL,
     SP25085 numeric(9,3)  NULL,
-    SP25086 numeric(13,2)  NULL,
+    SP25086 numeric(13,2)  NULL
     );
 
-);
 CREATE INDEX dt21203_retail_reports_iddoc_idx ON stg_dwh.dt21203_retail_reports USING btree (iddoc);
