@@ -6,7 +6,7 @@ from plugins.common.helpers import serialize_connection  # @UnresolvedImport
 from operators.visiology_operator import VisiologyAPIOperator
 
 # конфигурационный файл проекта
-import transform.config as config
+import trfm.config as config
 
 # переменные окружения передаются в Docker-контейнер
 environment = {
@@ -52,7 +52,7 @@ environment = {
 sql_path = f'/app/ws/source/{config.project_dir}/sql'
 python_path = f'/app/ws/source/{config.project_dir}/python'
 metadata_path = f'/app/ws/metadata/{config.project_dir}'
-share_path = f'/app/ws/share/{config.project_dir}/to_process' 
+share_path = f'/app/ws/share/{config.project_dir}/to_process'
 cache_path = f'/app/ws/cache/{config.project_dir}'
 
 
@@ -113,11 +113,11 @@ def extract_excel(subdir, schema, entity, from_dir, params={}, task_id=None, n_r
         auto_remove=True,
         environment={**environment,
                      **{'AF_DWH_DB_CONNECTION': serialize_connection(config.dwh_db_conn),
-                        'AF_PRODUCER': f'{metadata_path}/{subdir}/{entity}_producer.json', 
+                        'AF_PRODUCER': f'{metadata_path}/{subdir}/{entity}_producer.json',
                         'AF_CONSUMER': f'{metadata_path}/{subdir}/{entity}_consumer.json',
                         'AF_FILEPATH': f'{from_dir}',
                         'AF_DWH_DB_SCHEMA': schema},
-                        **params
+                     **params
                      },
         mounts=[Mount('/app/projects', 'df_projects'), Mount('/app/ws', 'df_workspace')],
         working_dir='/app',
