@@ -1,0 +1,39 @@
+import time
+
+from os import getenv
+from df.common.helpers.context import context_push, context_pull
+from df.common.helpers.logger import Logger
+
+log = Logger()
+
+
+def get_run_info():
+    d = getenv('AF_EXECUTION_DATE', '')
+    t = getenv('AF_TASK_ID', '')
+    o = getenv('AF_TASK_OWNER', '')
+    r = getenv('AF_RUN_ID', '')
+
+    return f'execution date: {d}, task id: {t}, owner: {o}, run id: {r}'
+
+def get_value():
+    """ Добавляет в контекст значение при action = 'pull', которое потом проверяет (при action = 'push') и возвращает
+        результат проверки
+    """
+    action = getenv('AF_ACTION', '')
+    env_value = getenv('AF_VALUE', '')
+    log.info(f'AF_ACTION: {action}, AF_VALUE: {env_value}')
+
+    value = env_value == 'Context value: 42' if action == 'pull' else '42'
+    return f'Context value: {value}'
+
+def main():
+    log.info('Run custom python script...')
+    log.info(f'Run info: {get_run_info()}')
+    # для возврата значения через XCom в DockerOperator вместо print необходимо использовать context_push
+    context_push(value=get_value())
+
+    # несмотря на дальнейший вывод в stdout, в XCom будет добавлено значение установленное через context_push
+    context_value = context_pull()
+    print(f'context_value: {context_value}')
+
+main()

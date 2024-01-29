@@ -1,0 +1,22 @@
+import time
+
+from os import getenv
+from df.common.helpers.logger import Logger
+
+log = Logger()
+
+
+def get_run_info():
+    d = getenv('AF_EXECUTION_DATE', '')
+    t = getenv('AF_TASK_ID', '')
+    o = getenv('AF_TASK_OWNER', '')
+    r = getenv('AF_RUN_ID', '')
+
+    return f'execution date: {d}, task id: {t}, owner: {o}, run id: {r}'
+
+
+def main():
+    log.info('Run custom python script...')
+    log.info(f'Run info: {get_run_info()}')
+
+main()

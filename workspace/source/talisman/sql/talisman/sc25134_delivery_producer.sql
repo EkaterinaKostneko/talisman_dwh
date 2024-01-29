@@ -1,0 +1,23 @@
+SELECT
+    ID,
+    CODE,
+    PARENTEXT,
+    ISMARK,
+    VERSTAMP,
+    SP25168,
+    SP25141,
+    SP25142,
+    SP25136,
+    SP25138,
+    SP25137,
+    SP25175,
+    SP25143,
+    SP25144,
+    SP25145,
+    SP25174,
+    SP25194,
+    SP25544,
+    SP25576,
+    SP25703,
+    SP26154
+FROM SC25134;

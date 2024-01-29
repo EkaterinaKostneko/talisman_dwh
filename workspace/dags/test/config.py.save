@@ -1,0 +1,5 @@
+min_load_date = '2023-01-01'log_level = 'info' # 'error', 'warning', 'info', 'debug'
+dwh_db_conn = 'MSSQL1'
+project_dir = 'test'
+min_load_date = '2023-01-01'
+

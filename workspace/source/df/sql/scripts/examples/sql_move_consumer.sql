@@ -1,0 +1,1 @@
+insert into {{ AF_SC_CONSUMER_ }}test_sql_move(name, value, dt) values (?, ?, ?)

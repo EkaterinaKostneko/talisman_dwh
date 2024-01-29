@@ -1,0 +1,7 @@
+DAG: {{ dag.safe_dag_id }}<br>
+Task: {{ ti.task_id }}<br>
+Run Id: {{ run_id }}<br>
+Log:<br>
+<pre>
+{{ ti.log_trypath|readtext }}
+</pre>

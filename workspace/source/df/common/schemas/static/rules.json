@@ -1,0 +1,549 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://polyanalitika.ru/jsonschemas/qc.schema.v1.json",
+  "type": "object",
+  "unevaluatedProperties": false,
+  "title": "Правила ККД",
+  "swatch": {
+    "sources": {
+      "entities": {
+        "title": "Сущности",
+        "objectType": "DWHMODEL",
+        "attribute": "body",
+        "path": "entities::$type=LocalEntity",
+        "prefix": "/annotations::name=schema::/value",
+        "delimiter": ".",
+        "levels": {
+          "/": "name",
+          "/attributes": "name"
+        }
+      },
+      "providers": {
+        "title": "Провайдеры",
+        "objectType": "PROVIDER",
+        "attribute": "code"
+      }
+    }
+  },
+  "required": [
+    "name",
+    "controllers"
+  ],
+  "properties": {
+    "name": {
+      "type": "string",
+      "title": "Наименование"
+    },
+    "description": {
+      "type": "string",
+      "title": "Описание"
+    },
+    "controllers": {
+      "type": "array",
+      "unevaluatedItems": false,
+      "title": "Контроллеры",
+      "uniqueKeys": [
+        "/name"
+      ],
+      "logicalKeys": [
+        "/name"
+      ],
+      "items": {
+        "type": "object",
+        "unevaluatedProperties": false,
+        "title": "Контроллер",
+        "required": [
+          "name",
+          "family",
+          "context",
+          "units"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "title": "Наименование"
+          },
+          "description": {
+            "type": "string",
+            "title": "Описание"
+          },
+          "version": {
+            "type": "number",
+            "title": "Версия",
+            "default": 2.0
+          },
+          "family": {
+            "type": "string",
+            "title": "Вид",
+            "oneOf": [
+              {
+                "const": "ServersideCaseQuerier"
+              }
+            ]
+          },
+          "context": {
+            "type": "object",
+            "unevaluatedProperties": false,
+            "title": "Контекст",
+            "required": [
+              "entity"
+            ],
+            "properties": {
+              "provider": {
+                "type": "string",
+                "title": "Код подключения",
+                "hints": {
+                  "source": {
+                    "path": "#/swatch/sources/providers"
+                  }
+                }
+              },
+              "entity": {
+                "type": "string",
+                "title": "Сущность",
+                "hints": {
+                  "source": {
+                    "path": "#/swatch/sources/entities",
+                    "slug": "/name"
+                  }
+                }
+              },
+              "errors_entity": {
+                "type": "string",
+                "title": "Сущность с результатами"
+              }
+            }
+          },
+          "units": {
+            "type": "array",
+            "unevaluatedItems": false,
+            "title": "Узлы контроля",
+            "uniqueKeys": [
+              "/name"
+            ],
+            "logicalKeys": [
+              "/name"
+            ],
+            "items": {
+              "type": "object",
+              "unevaluatedProperties": false,
+              "title": "Узел контроля",
+              "required": [
+                "name",
+                "enabled",
+                "priority",
+                "severity",
+                "action",
+                "checker"
+              ],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "title": "Наименование"
+                },
+                "description": {
+                  "type": "string",
+                  "title": "Описание"
+                },
+                "enabled": {
+                  "type": "boolean",
+                  "title": "Включено",
+                  "default": true
+                },
+                "priority": {
+                  "type": "number",
+                  "default": 0,
+                  "minimum": 0,
+                  "maximum": 999
+                },
+                "severity": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "Низкая серьезность",
+                      "const": "low"
+                    },
+                    {
+                      "title": "Средняя серьезность",
+                      "const": "medium"
+                    },
+                    {
+                      "title": "Высокая серьезность",
+                      "const": "high"
+                    },
+                    {
+                      "title": "Критическая серьезность",
+                      "const": "critical"
+                    }
+                  ]
+                },
+                "action": {
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "Отметить запись",
+                      "const": "tag_only"
+                    },
+                    {
+                      "title": "Отбросить запись",
+                      "const": "reject_record"
+                    }
+                  ]
+                },
+                "options": {
+                  "type": "object",
+                  "unevaluatedProperties": false,
+                  "title": "Опции контроля",
+                  "properties": {
+                    "group": {
+                      "type": "string",
+                      "title": "Группа"
+                    }
+                  }
+                },
+                "checker": {
+                  "type": "object",
+                  "unevaluatedProperties": false,
+                  "title": "Функция контроля",
+                  "required": [
+                    "name"
+                  ],
+                  "oneOf": [
+                    {
+                      "title": "Значение не пустое",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Наименование функции",
+                          "const": "must_be_not_null",
+                          "hints": {
+                            "tags": [
+                              "Построчные"
+                            ]
+                          }
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Описание функции",
+                          "const": "Значение атрибута не может быть null"
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "unevaluatedProperties": false,
+                          "title": "Параметры функции",
+                          "required": [
+                            "attribute"
+                          ],
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "title": "Контролируемый атрибут",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "Значение короче чем",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Наименование функции",
+                          "const": "must_be_shorter_than",
+                          "hints": {
+                            "tags": [
+                              "Построчные"
+                            ]
+                          }
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Описание функции",
+                          "const": "Значение атрибута должно быть короче чем указано в ограничении"
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "unevaluatedProperties": false,
+                          "title": "Параметры функции",
+                          "required": [
+                            "attribute",
+                            "max_length"
+                          ],
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "title": "Контролируемый атрибут",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            },
+                            "max_length": {
+                              "type": "integer",
+                              "title": "Ограничение длины значения"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "Значение длиннее чем",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Наименование функции",
+                          "const": "must_be_longer_than",
+                          "hints": {
+                            "tags": [
+                              "Построчные"
+                            ]
+                          }
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Описание функции",
+                          "const": "Значение атрибута должно быть длиннее чем указано в ограничении"
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "unevaluatedProperties": false,
+                          "title": "Параметры функции",
+                          "required": [
+                            "attribute",
+                            "min_length"
+                          ],
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "title": "Контролируемый атрибут",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            },
+                            "max_length": {
+                              "type": "integer",
+                              "title": "Ограничение длины значения"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "Значение меньше чем",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Наименование функции",
+                          "const": "must_be_less_than",
+                          "hints": {
+                            "tags": [
+                              "Построчные"
+                            ]
+                          }
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Описание функции",
+                          "const": "Значение атрибута должно быть меньше чем указано в ограничении"
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "unevaluatedProperties": false,
+                          "title": "Параметры функции",
+                          "required": [
+                            "attribute",
+                            "max_value"
+                          ],
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "title": "Контролируемый атрибут",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            },
+                            "max_value": {
+                              "type": "integer",
+                              "title": "Ограничение величины значения"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "Значение больше чем",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Наименование функции",
+                          "const": "must_be_more_than",
+                          "hints": {
+                            "tags": [
+                              "Построчные"
+                            ]
+                          }
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Описание функции",
+                          "const": "Значение атрибута должно быть больше чем указано в ограничении"
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "unevaluatedProperties": false,
+                          "title": "Параметры функции",
+                          "required": [
+                            "attribute",
+                            "min_value"
+                          ],
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "title": "Контролируемый атрибут",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            },
+                            "max_value": {
+                              "type": "integer",
+                              "title": "Ограничение величины значения"
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "Запрет дубликатов",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Наименование функции",
+                          "const": "max_repeats",
+                          "hints": {
+                            "tags": [
+                              "Поатрибутные"
+                            ]
+                          }
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Описание функции",
+                          "const": "Одинаковых значений атрибута должно быть не больше"
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "unevaluatedProperties": false,
+                          "title": "Параметры функции",
+                          "required": [
+                            "attribute",
+                            "max_times"
+                          ],
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "title": "Контролируемый атрибут",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            },
+                            "max_times": {
+                              "type": "integer",
+                              "title": "Максимальное количество одинаковых значений",
+                              "default": 1
+                            }
+                          }
+                        }
+                      }
+                    },
+                    {
+                      "title": "Значение из справочника",
+                      "properties": {
+                        "name": {
+                          "type": "string",
+                          "title": "Наименование функции",
+                          "const": "must_be_known",
+                          "hints": {
+                            "tags": [
+                              "Комплексные"
+                            ]
+                          }
+                        },
+                        "description": {
+                          "type": "string",
+                          "title": "Описание функции",
+                          "const": "Значение атрибута должно присутствовать в справочнике"
+                        },
+                        "parameters": {
+                          "type": "object",
+                          "unevaluatedProperties": false,
+                          "title": "Параметры функции",
+                          "required": [
+                            "attribute",
+                            "ref_entity",
+                            "ref_attribute"
+                          ],
+                          "properties": {
+                            "attribute": {
+                              "type": "string",
+                              "title": "Контролируемый атрибут",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            },
+                            "ref_entity": {
+                              "type": "string",
+                              "title": "Наименование сущности-справочника",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/name"
+                                }
+                              }
+                            },
+                            "ref_attribute": {
+                              "type": "string",
+                              "title": "Наименование атрибута справочника",
+                              "hints": {
+                                "source": {
+                                  "path": "#/swatch/sources/entities",
+                                  "slug": "/attributes/name"
+                                }
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  ]
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

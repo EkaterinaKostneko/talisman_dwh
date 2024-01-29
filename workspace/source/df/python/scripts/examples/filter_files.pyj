@@ -1,0 +1,25 @@
+import time
+
+from os import getenv
+from datetime import datetime
+from df.common.helpers.logger import Logger
+
+log = Logger()
+
+
+def filter_by_date(file_info):
+    """ Функция для фильтрации файлов, перед загрузкой их с FTP.
+    :param file_info: метаинформация по файлу - объект с полями:
+        name: имя файла, например - 'file_cccc',
+        path: путь до файла, относительно рабочей директории, например - 'dir_2/dir_22/dir_221/file_cccc',
+        stat: стандартный объект типа os.path, например - StatResult(st_mode=33188, st_ino=None, st_dev=None,
+            st_nlink=1, st_uid='root', st_gid='root', st_size=0, st_atime=None, st_mtime=1635435480.0, st_ctime=None)
+    :returns: bool - True - если файл нужно загрузить, False - если файл загружать не нужно
+    """
+    # Загрузит с ftp файлы, дата изменения которых не меньше 2021-02-20 00:00:00
+    return _str_to_dt('2021-02-20 00:00:00') <= file_info.stat.st_mtime
+
+
+def _str_to_dt(s):
+    """ Преобразует строку "2021-10-20 07:21:00" в timestamp """
+    return time.mktime(datetime.strptime(s, '%Y-%m-%d %H:%M:%S').timetuple())

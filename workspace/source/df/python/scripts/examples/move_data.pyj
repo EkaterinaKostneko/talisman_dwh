@@ -1,0 +1,99 @@
+import time
+import pyodbc
+import psycopg2
+
+from os import getenv
+from psycopg2.extras import execute_values
+from df.common.helpers.logger import Logger
+from df.common.helpers.general import get_conn_parameters
+
+log = Logger()
+
+
+def get_ms_conn():
+    log.info('Connecting to ms...')
+    driver = 'ODBC Driver 17 for SQL Server'
+
+    conn_param = get_conn_parameters(connection=getenv('AF_SRC_CONNECTION'))
+    server=conn_param['host']
+    port=conn_param['port']
+    db=conn_param['schema']
+    user=conn_param['login']
+    pwd=conn_param['pass']
+
+    c = f'DRIVER={driver};SERVER={server};PORT={port};DATABASE={db};UID={user};PWD={pwd}'
+
+    conn = pyodbc.connect(c)
+    conn.setdecoding(pyodbc.SQL_WCHAR, encoding='utf-8')
+    conn.setdecoding(pyodbc.SQL_CHAR, encoding='utf-8')
+    conn.setencoding(encoding='utf-8')
+
+    return conn
+
+
+def get_pg_conn():
+    log.info('Connecting to pg...')
+
+    conn_param = get_conn_parameters(connection=getenv('AF_DEST_CONNECTION'))
+    server=conn_param['host']
+    port=conn_param['port']
+    db=conn_param['schema']
+    user=conn_param['login']
+    password=conn_param['pass']
+
+    c = {
+        'host': server,
+        'port': port,
+        'database': db,
+        'user': user,
+        'password': password
+    }
+    conn = psycopg2.connect(**c)
+
+    return conn
+
+
+def get_schema(env_var):
+    schema = getenv(env_var, '').split('.')[-1]
+    return f'{schema}.' if schema else ''
+
+
+def main():
+    src_conn = None
+    dest_conn = None
+    src_schema = get_schema('AF_SRC_SCHEMA')
+    dest_schema = get_schema('AF_DEST_SCHEMA')
+
+    try:
+        src_conn = get_ms_conn()
+        src_cursor = src_conn.cursor()
+        sql = f'select rtrim(name), value from {src_schema}test_move_data'
+        log.info(f'Running ms script:\n{sql}')
+        start = time.time()
+        src_cursor.execute(sql)
+        log.info(f'Select. Elapsed: {time.time() - start}s')
+
+        dest_conn = get_pg_conn()
+        dest_cursor = dest_conn.cursor()
+        sql = f'insert into {dest_schema}test_move_data(name, value) values %s'
+        log.info(f'Running pg script:\n{sql}')
+
+        start = time.time()
+        execute_values(dest_cursor,
+            sql,
+            src_cursor,
+            page_size={{ AF_INSERT_BATCH }}
+        )
+        dest_conn.commit()
+        log.info(f'Insert from Select. Elapsed: {time.time() - start}s')
+
+        src_cursor.close()
+        dest_cursor.close()
+    finally:
+        log.info('Closing connections...')
+        if src_conn:
+            src_conn.close()
+        if dest_conn:
+            dest_conn.close()
+
+main()

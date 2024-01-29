@@ -1,0 +1,1 @@
+insert into tuser.msv_test_table(label) values('transaction_test');

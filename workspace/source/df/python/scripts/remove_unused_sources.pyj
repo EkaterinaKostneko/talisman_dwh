@@ -1,0 +1,54 @@
+import os
+import shutil
+
+from os import getenv
+from df.common.helpers.logger import Logger
+
+log = Logger()
+
+
+def delete(path, only_files=True):
+    """ path может быть относительным и абсолютным """
+    deleted = False
+    try:
+        if not os.path.exists(path):
+            raise ValueError(f'Путь {path} не найден')
+
+        if os.path.isfile(path) or os.path.islink(path):
+            # удаляем файл
+            os.remove(path)
+        elif os.path.isdir(path) and not only_files:
+            # удаляем папку и все ее содержимое
+            shutil.rmtree(path)
+        else:
+            if os.path.isdir(path):
+                raise ValueError(f'Удаление директорий не доступно {path}')
+            else:
+                raise ValueError(f'Путь {path} не является ни файлом, ни директорией')
+        deleted = True
+    except Exception as e:
+        log.error(f'Ошибка удаления файла/директории: {e}')
+
+    return deleted
+
+
+def remove_files():
+    result = []
+    filename = getenv('AF_FILES', '')
+
+    with open(filename) as file:
+        for line in file:
+            path = line.rstrip()
+            if not path or path and path[0] == '#':
+                continue
+            if delete(path):
+                result.append(path)
+    return result
+
+def main():
+    log.info('Удаляем старые системные файлы...')
+    result = remove_files()
+    files = "\n".join(result)
+    log.info(f'Количество удаленных файлов {len(result)}:\n{files}')
+
+main()

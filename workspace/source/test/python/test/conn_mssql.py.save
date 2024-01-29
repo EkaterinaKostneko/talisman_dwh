@@ -1,0 +1,27 @@
+from os import getenv
+# import pymssql
+from df.common.helpers.general import Logger, get_decoded_connection
+import pyodbc
+
+def run():
+    log = Logger()
+
+    af_dwh_db_connection = getenv('AF_DWH_DB_CONNECTION')
+    dwh_db_connection = get_decoded_connection(af_dwh_db_connection)
+    db_host = dwh_db_connection['host']log = Logger()
+    db_port = dwh_db_connection['port']
+    db_database = dwh_db_connection['schema']
+    db_user = dwh_db_connection['login']
+    db_password = dwh_db_connection['pass']
+
+
+    try:
+        cnxn = pyodbc.connect('DRIVER={ODBC Driver 17 for SQL Server};SERVER='+db_host+','+str(db_port)+';DATABASE='+db_database+';UID='+db_user+';PWD='+db_password)
+        # conn = pymssql.connect(host=db_host, port=db_port, user=db_user, password=db_password, database=db_database)
+        print("ok")
+    except Exception as e:
+        print(e)
+
+
+if __name__ == '__main__':
+    run()

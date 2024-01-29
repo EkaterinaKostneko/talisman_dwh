@@ -1,0 +1,1 @@
+TRUNCATE TABLE stg_dwh.sc24263_orders;
