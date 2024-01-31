@@ -1,0 +1,60 @@
+select
+--sum(quantity) quantity ,
+--sum(return_quantity) return_quantity ,
+--sum(move_quantity) move_quantity ,
+--sum(revenue) revenue ,
+--sum(purchase) purchase ,
+--sum(revenue)- sum(purchase) as profit,
+--sum(revenue) -sum (purchase) - sum(discount1)- sum(discount2) -sum(discount3) - sum(discount4) -sum(discount5) as profit_net,
+--sum(revenue)- sum(discount1) - sum(discount2) -sum(discount3) - sum(discount4) -sum(discount5)  as  revenue_net,
+--sum(discount1)+ sum(discount2)+sum(discount3)+sum(discount4)+sum(discount5)  as  discount,
+--sum(manufacture) manufacture ,
+--sum(discount1) d1,
+--sum(discount2) d2,
+--sum(discount3) d3,
+--sum(discount4) d4,
+--sum(discount5) d5
+----sum(sp25079),
+----sum(sp25080),
+----sum(sp25081),
+----sum(sp25082),
+----sum(sp25083),
+----sum(sp25084),
+----sum(sp25085),
+----sum(sp25086)
+*
+from
+core.assortiment_plain_const ap
+join
+stg_dwh.dt21203_retail_reports drr
+on ap.iddoc = drr.iddoc
+and ap.lineno = drr.lineno_
+join
+stg_dwh.dh21203_retail_reports drrh
+on ap.iddoc = drrh.iddoc
+where docdate = '2023-11-20' and idstore like '%H7%'
+and return_quantity <>0
+--and kind = 1
+
+
+
+select
+--docdate,
+--pharmacycode ,
+sum(intquantity),
+sum(discountsum) discountsum ,
+sum(checksum_purchase) checksum_purchase  ,
+sum(checksum_selling) checksum_selling  ,
+sum(checksum_withdiscount) checksum_withdiscount,
+sum(checksum_withdiscount)-sum(checksum_purchase) as profit
+--*
+from
+stg_dwh.checkheaders c
+where docdate = '2023-10-01'
+and pharmacycode = 'Belog4'
+and (Status = 1
+or (Status<>1 and checktype=1))
+--or (status = -1))
+--and (Status<>1 and checktype=1)
+and WriteOffType is not null
+--and totalsum =354

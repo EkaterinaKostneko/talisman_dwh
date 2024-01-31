@@ -1,0 +1,7 @@
+SELECT 'SELECT ' ||
+ARRAY_TO_STRING(ARRAY(SELECT COLUMN_NAME::VARCHAR(50)
+	FROM INFORMATION_SCHEMA.COLUMNS
+	WHERE TABLE_NAME='assortiment_plain' AND
+    	COLUMN_NAME not like 'discount%'
+	ORDER BY ORDINAL_POSITION
+), ', ') || ' FROM core.assortiment_plain';

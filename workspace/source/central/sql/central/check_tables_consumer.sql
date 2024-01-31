@@ -1,4 +1,4 @@
-INSERT INTO stg_dwh.check_tables(
+INSERT INTO stg_dwh.checktables(
 	ID ,
 	DateTime,
 	CheckID,

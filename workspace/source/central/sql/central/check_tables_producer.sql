@@ -31,5 +31,4 @@ SELECT
 	EconomicGroupCode
 FROM
 	[Central].[dbo].[CheckTables]
-WHERE DocDate = '2023-10-01'
-;
+WHERE DocDate >= '2023-01-01'

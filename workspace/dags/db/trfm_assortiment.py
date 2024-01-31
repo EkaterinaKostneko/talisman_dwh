@@ -35,8 +35,9 @@ with DAG(dag_id, default_args=default_args, schedule_interval='0 1 * * *', catch
 
   #  t_truncate = run_sql( script='truncate_retail_reports.sql',  task_id='truncate_stg_dwh')
     t_finish_load = finish_load()
-    t_trfm_core = run_sql(script='assortiment_plain.sql', task_id='trfm_plain')
+    t_trfm_core = run_sql(script='core_assortiment_plain.sql', task_id='core_plain')
+    t_trfm_step1 = run_sql(script='trfm_assortiment_plain_step1.sql', task_id='trfm_step1')
     t_get_load_params = get_load_params()
 
- #   t_get_load_params >> [t_extract_sql('assortiment_plain')] >> t_finish_load
-t_get_load_params >> t_trfm_core >> t_finish_load
+
+t_get_load_params >> t_trfm_core >> t_trfm_step1 >> t_finish_load
