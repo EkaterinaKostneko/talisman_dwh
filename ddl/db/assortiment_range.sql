@@ -24,7 +24,7 @@ CREATE TABLE marts.sub_assortiment_range (
 CREATE OR REPLACE VIEW  marts.mart_range
 AS
 SELECT
-code 					"ID товара",
+id 					    "ID товара",
 descr 					"Наименование товара",
 product_group_descr 	"Товарная группа",
 product_category_descr 	"Товарная категория",
