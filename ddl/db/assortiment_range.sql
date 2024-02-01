@@ -1,6 +1,6 @@
-DROP TABLE IF EXISTS marts.sub_assortiment_range;
+DROP TABLE IF EXISTS core.sub_assortiment_range;
 
-CREATE TABLE marts.sub_assortiment_range (
+CREATE TABLE core.sub_assortiment_range (
         id varchar(9) ,
         parentid varchar(9) ,
         code varchar(6) ,
@@ -33,4 +33,4 @@ price_segment 			"Ценовой сегмент",
 economic_groups_descr 	"Экономическая группа",
 additional_products 	"Дополнительный ассортимент",
 marking_type 			"Вид маркировки"
-FROM marts.sub_assortiment_range sar
+FROM core.sub_assortiment_range sar
