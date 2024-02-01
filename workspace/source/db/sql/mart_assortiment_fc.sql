@@ -13,6 +13,14 @@ INSERT INTO marts.mart_assortiment_sales
  	"Back маржа",
  	"Общая прибыль с упаковки")
 SELECT
-
-FROM core.
-;
+    docdate,
+    idstore,
+    iditem,
+    quantity,
+    revenue-discount as rebate,
+    revenue-discount-purchase as profit,
+    (revenue-discount-purchase)/NULLIF(quantity, 0) as profitpack,
+    purchase/NULLIF(quantity, 0) as purchasepack,
+    0,
+    purchase/NULLIF(quantity, 0) as netpurchasepack
+FROM core.assortiment_final af

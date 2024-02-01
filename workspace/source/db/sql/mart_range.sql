@@ -1,6 +1,6 @@
-TRUNCATE TABLE marts.mart_range;
+TRUNCATE TABLE marts.t_mart_range;
 
-INSERT INTO marts.mart_range
+INSERT INTO marts.t_mart_range
 (
 	"ID товара",
 	"Наименование товара",
