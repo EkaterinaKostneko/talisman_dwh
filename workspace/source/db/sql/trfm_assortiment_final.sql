@@ -1,5 +1,5 @@
-CREATE OR REPLACE VIEW core.assortiment_plain_final
+CREATE OR REPLACE VIEW core.assortiment_final
 AS
-SELECT *
-FROM core.assortiment_plain_final
-WHERE kind = 1;
+SELECT * FROM core.assortiment_plain_step3
+WHERE
+kind = 1;
