@@ -16,7 +16,7 @@ default_args = {
     'retries': 0
 }
 
-dag_id = 'load_range'
+dag_id = 'load_assortiment_retail_reports'
 
 # заменить подключение к источнику и поменять схему продюсера на схему источника
 def t_extract_sql(entity):
@@ -31,15 +31,14 @@ def t_extract_sql(entity):
     )
 
 
-with DAG(dag_id, default_args=default_args, schedule_interval='00 02 * * *', catchup=False, tags=['main']) as dag:
+with DAG(dag_id, default_args=default_args, schedule_interval='0 22 * * *', catchup=False, tags=['main']) as dag:
 
     t_truncate = run_sql(
-        script='truncate_range.sql',
+        script='truncate_retail_reports.sql',
         task_id='truncate_stg_dwh')
-    t_load_mart = run_sql(script='mart_range.sql', task_id='load_mart')
     t_finish_load = finish_load()
     # t_get_load_id = get_load_id()
     t_get_load_params = get_load_params()
 
-    t_get_load_params >> t_truncate >> [t_extract_sql('sc156_range'), t_extract_sql('sc25892_product_groups'), t_extract_sql('sc25148_economic_groups'), t_extract_sql('sc25097_product_categories'), t_extract_sql('sc23072_mnn_directory')] >> t_load_mart >> t_finish_load
+    t_get_load_params >> t_truncate >> [t_extract_sql('dt21203_retail_reports'), t_extract_sql('dh21203_retail_reports')] >> t_finish_load
 

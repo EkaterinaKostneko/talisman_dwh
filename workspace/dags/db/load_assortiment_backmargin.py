@@ -16,7 +16,7 @@ default_args = {
     'retries': 0
 }
 
-dag_id = 'load_backmargin'
+dag_id = 'load_assortiment_backmargin'
 
 # заменить подключение к источнику и поменять схему продюсера на схему источника
 def t_extract_sql(entity):
