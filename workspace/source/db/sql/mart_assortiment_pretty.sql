@@ -1,26 +1,21 @@
-TRUNCATE TABLE marts.mart_assortiment_sales;
-
-INSERT INTO marts.mart_assortiment_sales
-(
-	"Дата",
- 	"ID аптеки",
- 	"ID товара",
- 	"Количество",
- 	"Валовая выручка",
- 	"Валовая прибыль",
- 	"Цена розничная",
- 	"Прибыль с упаковки",
- 	"Back маржа",
- 	"Общая прибыль с упаковки")
+CREATE OR REPLACE VIEW marts.mart_assortiment_pretty
+AS
 SELECT
-    docdate,
-    idstore,
-    iditem,
-    quantity,
-    revenue-discount as rebate,
-    revenue-discount-purchase as profit,
-    (revenue-discount-purchase)/NULLIF(quantity, 0) as profitpack,
-    purchase/NULLIF(quantity, 0) as purchasepack,
-    0,
-    purchase/NULLIF(quantity, 0) as netpurchasepack
+    docdate     "Дата",
+    idstore     "ID аптеки",
+    iditem      "ID товара",
+    quantity    "Количество",
+    revenue-discount
+                "Валовая выручка",
+    revenue-discount-purchase
+                "Валовая прибыль",
+    (revenue-discount-purchase)/NULLIF(quantity, 0)
+                 "Цена розничная",
+    purchase/NULLIF(quantity, 0)
+                 "Прибыль с упаковки",
+    0
+                 "Back маржа",
+    purchase/NULLIF(quantity, 0)
+                "Общая прибыль с упаковки"
 FROM core.assortiment_final af
+
