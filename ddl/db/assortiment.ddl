@@ -1,7 +1,3 @@
--- stg_dwh.dh21203_retail_reports definition
-
--- Drop table
-
 DROP TABLE IF EXISTS core.assortiment_plain;
 
 CREATE TABLE core.assortiment_plain (
