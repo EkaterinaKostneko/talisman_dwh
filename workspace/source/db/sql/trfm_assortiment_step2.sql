@@ -1,3 +1,4 @@
+--суммируем все дисконты в одно поле
 CREATE OR REPLACE VIEW core.assortiment_plain_step2
 AS SELECT
     assortiment_plain.docdate,
