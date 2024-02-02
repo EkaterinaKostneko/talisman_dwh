@@ -49,4 +49,4 @@ with DAG(dag_id, default_args=default_args, schedule_interval='0 1 * * *', catch
 
 t_get_load_params >> t_trfm_core >> t_trfm_step1 >> \
 [t_trfm_step2, t_trfm_step3, t_trfm_step4] >> t_trfm_final >> \
-[t_trfm_mart, t_trfm_mart_pretty] >> t_finish_load
+[t_mart, t_mart_pretty] >> t_finish_load
