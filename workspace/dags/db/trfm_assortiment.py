@@ -30,6 +30,17 @@ def t_extract_sql(entity):
         }
     )
 
+def t_run_sql(entity):
+    return run_sql(
+        source_conn=src_dwh_db_conn,
+        subdir='assortiment',
+        entity=entity,
+        params={
+            'AF_DWH_DB_SCHEMA_PRODUCER': 'dbo',
+            'AF_DWH_DB_SCHEMA_CONSUMER': 'stg_dwh'
+        }
+    )
+
 
 with DAG(dag_id, default_args=default_args, schedule_interval='0 1 * * *', catchup=False, tags=['main']) as dag:
 
@@ -48,5 +59,5 @@ with DAG(dag_id, default_args=default_args, schedule_interval='0 1 * * *', catch
 
 
 t_get_load_params >> t_trfm_core >> t_trfm_step1 >> \
-[t_trfm_step2, t_trfm_step3, t_trfm_step4] >> t_trfm_final >> \
+[t_trfm_step2, t_trfm_step3] >> t_trfm_step4 >> t_trfm_final >> \
 [t_mart, t_mart_pretty] >> t_finish_load
