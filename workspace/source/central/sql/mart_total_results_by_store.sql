@@ -31,8 +31,9 @@ SELECT
 FROM 
 stg_dwh.checkheaders  ch 
 where
-Status = 1
-and WriteOffType is not NULL
+ch.Status = 1 AND
+ (ch.ConsumptionType = 1 OR ch.ConsumptionType = 4) AND
+ ch.WriteOffFlag = 0
 --and DocDate between '01.01.2023' and '31.10.2023'
 group by DocDate,
 PharmacyCode 
