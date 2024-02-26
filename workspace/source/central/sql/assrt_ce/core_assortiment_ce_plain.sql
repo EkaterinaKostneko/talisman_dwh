@@ -1,11 +1,11 @@
 TRUNCATE TABLE core.assortiment_ce_plain;
 
+
 INSERT INTO core.assortiment_ce_plain (
 	IDHeader            ,
 	IDTable             ,
 	DocDate             ,
 	IDdoc               ,
-	lineno              ,
 	UpdateDate          ,
 	IDstore             ,
 	IDitem              ,
@@ -14,13 +14,9 @@ INSERT INTO core.assortiment_ce_plain (
     ConsumptionType     ,
     WriteOffFlag        ,
 	quantity            ,
-	return_quantity     ,
-	move_quantity       ,
 	revenue             ,
+	discount            ,
 	purchase            ,
-    discount            ,
-    manufacture         ,
-    kind                ,
     Price               ,
     PurchasePrice       ,
     SellingPrice        ,
@@ -28,7 +24,6 @@ INSERT INTO core.assortiment_ce_plain (
     IntQuantity         ,
     FracQuantity        ,
     Sum                 ,
-    Discount            ,
     Akciya              ,
     Coupon              ,
     DiscByDiscCard      ,
@@ -43,8 +38,7 @@ SELECT
     Doc.ID                  as IDHeader,
     DocTabl.ID              as IDTable,
 	Doc.DocDate             as DocDate,
-	TRIM(Doc.DocNumber)     as IDdoc,
-	0                       as lineno,
+	Doc.DocNumber     		as IDdoc,
 	Doc.DateTime            as UpdateDate,
 	TRIM(PharmacyCode)      as IDstore,
 	TRIM(TovarCode1C)       as IDitem,
@@ -52,32 +46,28 @@ SELECT
     Doc.Status              as Status,
     Doc.ConsumptionType     as ConsumptionType,
     Doc.WriteOffFlag        as WriteOffFlag,
-	DocTabl.IntQuantity     as quantity,
-	DocTabl.FracQuantity    as return_quantity,
-	0                       as move_quantity,
-	DocTabl.Sum             as revenue ,
-	DocTabl.Discount        as discount ,
-    DocTabl.PurchasePrice   as purchase ,
-	0                       as manufacture,
-	NULL                    as kind,
-    Price                   as Price,
-    PurchasePrice           as PurchasePrice,
-    SellingPrice            as SellingPrice,
-    DiscountPrice           as DiscountPrice,
-    IntQuantity             as IntQuantity,
-    FracQuantity            as FracQuantity,
-    Sum                     as Sum,
-    Discount                as Discount,
-    Akciya                  as Akciya,
-    Coupon                  as Coupon,
-    DiscByDiscCard          as DiscByDiscCard,
-    DiscOfSite              as DiscOfSite,
-    DiscByRecipe            as DiscByRecipe,
-    DiscByBonusCard         as DiscByBonusCard,
-    DiscByAkciya            as DiscByAkciya,
-    VSDQuantity             as VSDQuantity,
-    EconomicGroupCode    	as EconomicGroupCode
-FROM 	stg_dwh.checkheaders    AS Doc
-LEFT JOIN stg_dwh.checktables   AS DocTabl
-	ON TRIM(Doc.DocNumber) = TRIM(DocTabl.DocNumber)
-where Doc.DocDate between '2023-10-01' and '2023-10-01'
+	DocTabl.IntQuantity             as quantity,
+	DocTabl.Sum                     as revenue ,
+	DocTabl.Discount                as discount ,
+    DocTabl.PurchasePrice*DocTabl.IntQuantity
+                                    as purchase ,
+    DocTabl.Price                   as Price,
+    DocTabl.PurchasePrice           as PurchasePrice,
+    DocTabl.SellingPrice            as SellingPrice,
+    DocTabl.DiscountPrice           as DiscountPrice,
+    DocTabl.IntQuantity             as IntQuantity,
+    DocTabl.FracQuantity            as FracQuantity,
+    DocTabl.Sum                     as Sum,
+    DocTabl.Akciya                  as Akciya,
+    DocTabl.Coupon                  as Coupon,
+    DocTabl.DiscByDiscCard          as DiscByDiscCard,
+    DocTabl.DiscOfSite              as DiscOfSite,
+    DocTabl.DiscByRecipe            as DiscByRecipe,
+    DocTabl.DiscByBonusCard         as DiscByBonusCard,
+    DocTabl.DiscByAkciya            as DiscByAkciya,
+    DocTabl.VSDQuantity             as VSDQuantity,
+    DocTabl.EconomicGroupCode    	as EconomicGroupCode
+FROM 	ods.checkheaders    AS Doc
+LEFT JOIN ods.checktables   AS DocTabl
+	ON Doc.ID=DocTabl.CheckID
+where Doc.DocDate between '2024-02-01' and '2024-02-01'

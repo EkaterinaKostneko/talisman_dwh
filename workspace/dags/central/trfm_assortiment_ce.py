@@ -2,7 +2,7 @@
 import datetime as dt
 from airflow import DAG
 
-from .helpers import (run_sql, finish_load, extract_sql, run_python, get_load_params)
+from central.helpers import (run_sql, finish_load, extract_sql, run_python, get_load_params)
 from central.config import dwh_db_conn
 from central.config import src_dwh_db_conn
 
@@ -16,7 +16,7 @@ default_args = {
     'retries': 0
 }
 
-dag_id = 'trfm_assortiment'
+dag_id = 'trfm_assortiment_ce'
 
 # заменить подключение к источнику и поменять схему продюсера на схему источника
 def t_extract_sql(entity):
@@ -46,12 +46,12 @@ with DAG(dag_id, default_args=default_args, schedule_interval='0 1 * * *', catch
 
   #  t_truncate = run_sql( script='truncate_retail_reports.sql',  task_id='truncate_stg_dwh')
     t_finish_load   = finish_load()
-    t_trfm_core     = run_sql(script='asstrt_ce/core_assortiment_ce_plain.sql', task_id='core_plain')
-    t_trfm_in       = run_sql(script='asstrt_ce/trfm_assortiment_ce_turn.sql',  task_id='trfm_in')
-    t_trfm_step1    = run_sql(script='asstrt_ce/trfm_assortiment_ce_step1.sql', task_id='trfm_1_filter')
-    t_trfm_out      = run_sql(script='asstrt_ce/trfm_assortiment_ce_final.sql', task_id='trfm_out')
-    t_mart          = run_sql(script='asstrt_ce/mart_assortiment_ce.sql',       task_id='mart_sales')
-    t_mart_pretty   = run_sql(script='asstrt_ce/mart_assortiment_ce_pretty.sql',task_id='mart_sales_pretty')
+    t_trfm_core     = run_sql(script='assrt_ce/core_assortiment_ce_plain.sql', task_id='core_plain')
+    t_trfm_in       = run_sql(script='assrt_ce/trfm_assortiment_ce_turn.sql',  task_id='trfm_in')
+    t_trfm_step1    = run_sql(script='assrt_ce/trfm_assortiment_ce_step1.sql', task_id='trfm_1_filter')
+    t_trfm_out      = run_sql(script='assrt_ce/trfm_assortiment_ce_final.sql', task_id='trfm_out')
+    t_mart          = run_sql(script='assrt_ce/mart_assortiment_ce.sql',       task_id='mart_sales')
+    t_mart_pretty   = run_sql(script='assrt_ce/mart_assortiment_ce_pretty.sql',task_id='mart_sales_pretty')
 
     t_get_load_params = get_load_params()
 
