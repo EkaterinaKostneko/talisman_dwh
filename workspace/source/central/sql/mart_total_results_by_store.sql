@@ -32,7 +32,9 @@ FROM
 stg_dwh.checkheaders  ch 
 where
 ch.Status = 1 AND
- (ch.ConsumptionType = 1 OR ch.ConsumptionType = 4) AND
+ (ch.ConsumptionType = 1
+    OR ch.ConsumptionType = 4
+    OR ch.ConsumptionType = 8) AND
  ch.WriteOffFlag = 0
 --and DocDate between '01.01.2023' and '31.10.2023'
 group by DocDate,

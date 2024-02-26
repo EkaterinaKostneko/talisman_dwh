@@ -1,7 +1,7 @@
 truncate table marts.mart_margin_projects;
 
 insert into marts.mart_margin_projects(
-    	"Дата",
+    "Дата",
 	"Код аптеки проекта",
 	"Код контрагента",
 	"Номер типа заказа",
@@ -11,7 +11,7 @@ insert into marts.mart_margin_projects(
 	"Себестоимость",
 	"Наценка")
 SELECT
-        	r.docdate AS "Дата",
+        r.docdate AS "Дата",
 		r.pharmacycode AS "Код аптеки проекта",
 		s."ID_Контрагенты"  AS "Код аптеки",
 		r.typeorder AS "Номер типа заказа", 	
