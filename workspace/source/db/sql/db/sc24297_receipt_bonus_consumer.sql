@@ -1,0 +1,20 @@
+INSERT INTO dwh.stg_dwh.sc24297_receipt_bonus (
+	ROW_ID           ,
+	ID               ,
+	PARENTID         ,
+	CODE             ,
+	DESCR           ,
+	ISFOLDER        ,
+	ISMARK           ,
+	VERSTAMP        ,
+	SP24299         ,
+	SP24300          ,
+	SP24301          ,
+	SP24302          ,
+	SP24303         ,
+	SP24304          ,
+	SP24307         ,
+	SP24349         ,
+	SP24350          ,
+	SP24407
+) VALUES %s;
