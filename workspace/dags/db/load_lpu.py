@@ -36,7 +36,10 @@ with DAG(dag_id, default_args=default_args, schedule_interval='00 16 * * *', cat
     t_truncate = run_sql(
         script='lpu/truncate_lpu.sql',
         task_id='truncate_stg_dwh')
-    t_load_mart = run_sql(script='lpu/mart_lpu.sql', task_id='load_mart')
+    t_load_mart_1 = run_sql(script='lpu/mart_lpu_doctor_list.sql',      task_id='load_mart')
+    t_load_mart_2 = run_sql(script='lpu/mart_lpu_filial.sql',           task_id='load_mart')
+    t_load_mart_3 = run_sql(script='lpu/mart_lpu_sales.sql',            task_id='load_mart')
+    t_load_mart_4 = run_sql(script='lpu/mart_lpu_doctor_categories.sql',task_id='load_mart')
     t_finish_load = finish_load()
     # t_get_load_id = get_load_id()
     t_get_load_params = get_load_params()
@@ -44,6 +47,10 @@ with DAG(dag_id, default_args=default_args, schedule_interval='00 16 * * *', cat
     t_get_load_params >> t_truncate >> \
         [t_extract_sql('sc208_staff'),
          t_extract_sql('sc24297_receipt_bonus'),
-         t_extract_sql('sc24313_doctor')]\
-    >> t_load_mart >> t_finish_load
+         t_extract_sql('sc24313_doctor')] >> \
+        [t_load_mart_1,
+        t_load_mart_2,
+        t_load_mart_3,
+        t_load_mart_4] >> \
+    t_finish_load
 
