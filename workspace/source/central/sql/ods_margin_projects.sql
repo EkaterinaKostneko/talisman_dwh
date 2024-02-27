@@ -25,7 +25,7 @@ SELECT
 	SUM(totalsum)-SUM(DiscountSum) AS SallingSum,
 	SUM(checksum_purchase) AS PurchaseSum
 FROM
-	stg_dwh.CheckHeaders AS alHead
+	ods.CheckHeaders AS alHead
 WHERE
 	alHead.Status = 1
 	AND alHead.WriteOffType is not null 
