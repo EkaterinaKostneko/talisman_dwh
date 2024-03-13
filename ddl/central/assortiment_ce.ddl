@@ -1,4 +1,4 @@
-ALTER TABLE core.assortiment_ce_plain RENAME TO assortiment_plain_last_ce;
+ALTER TABLE core.assortiment_ce_plain RENAME TO assortiment_ce_plain_last;
 
 CREATE TABLE core.assortiment_ce_plain (
 	IDHeader            int4,
@@ -28,7 +28,6 @@ CREATE TABLE core.assortiment_ce_plain (
     IntQuantity         decimal(12,2) ,
     FracQuantity        int ,
     Sum                 decimal(12,2) ,
-    Discount            decimal(12,2) ,
     Akciya              decimal(12,2) ,
     Coupon              decimal(12,2) ,
     DiscByDiscCard      decimal(12,2) ,
@@ -37,7 +36,9 @@ CREATE TABLE core.assortiment_ce_plain (
     DiscByBonusCard     decimal(12,2) ,
     DiscByAkciya        decimal(12,2) ,
     VSDQuantity         decimal(12,4) ,
-    EconomicGroupCode   int
+    EconomicGroupCode   int ,
+    Channel             int ,
+    ChannelDesc         varchar(20)
 );
 
 --создать секцию переименования индексов, чтобы избежать конфликта имен
@@ -50,4 +51,6 @@ CREATE INDEX  assortiment_ce_plain_idstore_idx ON core.assortiment_ce_plain USIN
 CREATE INDEX  assortiment_ce_plain_updatedate_idx ON core.assortiment_ce_plain USING btree (updatedate);
 CREATE INDEX  assortiment_ce_plain_quantity_idx ON core.assortiment_ce_plain (quantity)
     WHERE quantity = 0;
+CREATE INDEX  assortiment_ce_plain_channel_idx ON core.assortiment_ce_plain USING btree (channel);
+
 
