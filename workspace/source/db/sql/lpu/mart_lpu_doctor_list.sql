@@ -2,18 +2,18 @@
 CREATE OR REPLACE VIEW marts.mart_doctor_list
 AS
 SELECT
- TRIM (PARENTEXT) AS ID_Врач,
- TRIM (SP24317) AS ID_Аптека,
- SP24316 AS НомерРецепта,
- SP24315 AS НомерЧека,
- SP24318 AS Сумма,
- SP24319 AS ДатаЧека,
- SP24320 AS Начисленно,
- SP24335 AS Выплачено,
- TRIM (SC24297.PARENTID) AS ID_Филиал,
+ LTRIM (SC24297.ID) AS ID_Врач,
+ LTRIM (SC24297.PARENTID) AS ID_Филиал,
+ (CASE
+           WHEN SC24297.DESCR like '' THEN 'Пустая строка!'
+            ELSE SC24297.DESCR
+ END)                                         AS ФИО_Врач,
+ SP24299 AS ДатаРождения,
+ SP24300 AS Должность,
+ SP24301 AS ЛПУ,
+ SP24349 AS ДатаДоговора,
  SC208.DESCR AS Менеджер
-FROM stg_dwh.sc24313_doctor  SC24313
-LEFT JOIN stg_dwh.sc24297_receipt_bonus  SC24297
-ON TRIM(SC24297.ID) = TRIM(SC24313.PARENTEXT)
-LEFT JOIN stg_dwh.sc208_staff SC208 ON SC208.ID = SC24297.SP24350
+FROM stg_dwh.sc24297_receipt_bonus  SC24297
+LEFT JOIN stg_dwh.sc208_staff  SC208 ON SC208.ID = SC24297.SP24350
+WHERE  SC24297.DESCR NOT LIKE '%илиал%'
 ;
