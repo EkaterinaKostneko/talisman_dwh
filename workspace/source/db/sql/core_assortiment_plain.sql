@@ -44,4 +44,6 @@ LEFT JOIN stg_dwh.dt21203_retail_reports  AS DocTabl
 	ON Doc.iddoc = DocTabl.iddoc
 LEFT JOIN core."_1sjourn" AS DocJourn
 	ON Doc.iddoc = DocJourn.iddoc
+--WHERE
+--    DocTabl.SP25099 = 0 -- убираем возвраты (временно, потом включить в шаги)
 --where DocJourn.DocDate between '2023-10-01' and '2023-10-01'
