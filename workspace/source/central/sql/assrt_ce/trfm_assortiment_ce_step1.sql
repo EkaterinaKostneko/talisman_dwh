@@ -1,3 +1,5 @@
+DROP VIEW IF EXISTS core.assortiment_ce_step1 CASCADE;
+
 --отбираем нужные поля и фильтруем
 CREATE OR REPLACE VIEW core.assortiment_ce_step1
 AS SELECT
@@ -11,6 +13,7 @@ AS SELECT
        r.revenue    as revenue,
        r.purchase   as purchase,
        r.discount   as discount,
+       r.typeorder as typeorder,
        (CASE
             WHEN TypeOrder = 0 THEN 'Без заказов'
             WHEN TypeOrder = 8 and OnlineSale = 1 THEN 'Твояаптека.рф'
