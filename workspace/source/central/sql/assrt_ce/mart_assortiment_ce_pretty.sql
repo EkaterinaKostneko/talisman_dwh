@@ -16,6 +16,8 @@ SELECT
     0
                  "Back маржа",
     purchase/NULLIF(quantity, 0)
-                "Общая прибыль с упаковки"
+                "Общая прибыль с упаковки",
+    TypeOrderName
+                "Канал продаж"
 FROM core.assortiment_ce_final af
 

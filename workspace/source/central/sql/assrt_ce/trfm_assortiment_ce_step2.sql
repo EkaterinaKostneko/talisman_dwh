@@ -1,4 +1,4 @@
---добавляем каналы продаж
+--добавляем каналы продаж (не используется, добавлено в шаг 1)
 CREATE OR REPLACE VIEW core.assortiment_ce_step2
 AS SELECT
        r.docdate    as docdate,

@@ -35,7 +35,8 @@ INSERT INTO core.assortiment_ce_plain (
     EconomicGroupCode   ,
     RecipeNumber        ,
     TypeRaw             ,
-    TypeOrder
+    TypeOrder           ,
+    OnLineSale
 )
 SELECT
     Doc.ID                  as IDHeader,
@@ -76,7 +77,11 @@ SELECT
 	    WHEN ((POSITION(';' in Doc.RecipeNumber) - 1) <> 4) AND ((POSITION(';' in  Doc.RecipeNumber) - 1) <> 6) AND (SUBSTRING(Doc.RecipeNumber FROM 1 FOR 1) <> '3') THEN 8
 	    WHEN ((POSITION(';' in  Doc.RecipeNumber) - 1) = 4) OR (((POSITION(';' in  Doc.RecipeNumber) - 1) = 8) AND (SUBSTRING(Doc.RecipeNumber FROM 1 FOR 1) = '3')) THEN 4
 	    ELSE (POSITION(';' in  Doc.RecipeNumber) - 1)
-	  END AS TypeOrder
+	  END AS TypeOrder,
+	(CASE
+		WHEN (TRIM(Doc.RecipeNumber)='') THEN 0
+		ELSE 1
+	END) AS OnLineSale
 FROM 	ods.checkheaders    AS Doc
 LEFT JOIN ods.checktables   AS DocTabl
 	ON Doc.ID=DocTabl.CheckID

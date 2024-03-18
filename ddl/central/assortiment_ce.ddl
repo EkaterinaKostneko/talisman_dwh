@@ -40,7 +40,8 @@ CREATE TABLE core.assortiment_ce_plain (
 	RecipeNumber        varchar(20),
     TypeRaw             int2,
     TypeOrder           int2,
-    TypeOrderName       varchar(20)
+    TypeOrderName       varchar(20),
+    OnlineSale          int2
 );
 
 --создать секцию переименования индексов, чтобы избежать конфликта имен
