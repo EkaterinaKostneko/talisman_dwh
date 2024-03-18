@@ -37,8 +37,10 @@ CREATE TABLE core.assortiment_ce_plain (
     DiscByAkciya        decimal(12,2) ,
     VSDQuantity         decimal(12,4) ,
     EconomicGroupCode   int ,
-    Channel             int ,
-    ChannelDesc         varchar(20)
+	RecipeNumber        varchar(20),
+    TypeRaw             int2,
+    TypeOrder           int2,
+    TypeOrderName       varchar(20)
 );
 
 --создать секцию переименования индексов, чтобы избежать конфликта имен
@@ -51,6 +53,6 @@ CREATE INDEX  assortiment_ce_plain_idstore_idx ON core.assortiment_ce_plain USIN
 CREATE INDEX  assortiment_ce_plain_updatedate_idx ON core.assortiment_ce_plain USING btree (updatedate);
 CREATE INDEX  assortiment_ce_plain_quantity_idx ON core.assortiment_ce_plain (quantity)
     WHERE quantity = 0;
-CREATE INDEX  assortiment_ce_plain_channel_idx ON core.assortiment_ce_plain USING btree (channel);
+CREATE INDEX  assortiment_ce_plain_channel_idx ON core.assortiment_ce_plain USING btree (typeorder);
 
 

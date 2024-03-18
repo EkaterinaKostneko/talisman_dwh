@@ -32,7 +32,10 @@ INSERT INTO core.assortiment_ce_plain (
     DiscByBonusCard     ,
     DiscByAkciya        ,
     VSDQuantity         ,
-    EconomicGroupCode
+    EconomicGroupCode   ,
+    RecipeNumber        ,
+    TypeRaw             ,
+    TypeOrder
 )
 SELECT
     Doc.ID                  as IDHeader,
@@ -66,7 +69,14 @@ SELECT
     DocTabl.DiscByBonusCard         as DiscByBonusCard,
     DocTabl.DiscByAkciya            as DiscByAkciya,
     DocTabl.VSDQuantity             as VSDQuantity,
-    DocTabl.EconomicGroupCode    	as EconomicGroupCode
+    DocTabl.EconomicGroupCode    	as EconomicGroupCode,
+    Doc.RecipeNumber ,
+    POSITION(';' in Doc.RecipeNumber) - 1 as TypeRaw,
+	 CASE
+	    WHEN ((POSITION(';' in Doc.RecipeNumber) - 1) <> 4) AND ((POSITION(';' in  Doc.RecipeNumber) - 1) <> 6) AND (SUBSTRING(Doc.RecipeNumber FROM 1 FOR 1) <> '3') THEN 8
+	    WHEN ((POSITION(';' in  Doc.RecipeNumber) - 1) = 4) OR (((POSITION(';' in  Doc.RecipeNumber) - 1) = 8) AND (SUBSTRING(Doc.RecipeNumber FROM 1 FOR 1) = '3')) THEN 4
+	    ELSE (POSITION(';' in  Doc.RecipeNumber) - 1)
+	  END AS TypeOrder
 FROM 	ods.checkheaders    AS Doc
 LEFT JOIN ods.checktables   AS DocTabl
 	ON Doc.ID=DocTabl.CheckID
