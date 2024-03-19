@@ -12,8 +12,17 @@ AS SELECT
 --       r.return_quantity,
        r.revenue    as revenue,
        r.purchase   as purchase,
-       r.discount   as discount,
-       r.typeorder as typeorder,
+       r.discount  -
+            r.discbybonuscard -
+            r.discofsite -
+            r.discbydisccard -
+            r.discbyrecipe -
+            r.discbyakciya
+                    as discount,
+       r.recipenumber
+                    as recipenumber,
+       r.onlinesale as onlinesale,
+       r.typeorder  as typeorder,
        (CASE
             WHEN TypeOrder = 0 THEN 'Без заказов'
             WHEN TypeOrder = 8 and OnlineSale = 1 THEN 'Твояаптека.рф'
@@ -22,7 +31,7 @@ AS SELECT
             WHEN TypeOrder = 4 THEN 'АСЗ (Самовывоз)'
             WHEN TypeOrder = 6 THEN 'Семейная-аптека.рф'
             ELSE 'Не определено'
-        END) AS TypeOrderName
+        END)        as TypeOrderName
    FROM core.assortiment_ce_in as r
    WHERE
    r.Status = 1 AND
