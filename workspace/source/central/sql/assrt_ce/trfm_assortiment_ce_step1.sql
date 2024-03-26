@@ -12,12 +12,12 @@ AS SELECT
 --       r.return_quantity,
        r.revenue    as revenue,
        r.purchase   as purchase,
-       r.discount  -
-            r.discbybonuscard -
-            r.discofsite -
-            r.discbydisccard -
-            r.discbyrecipe -
-            r.discbyakciya
+       r.discount  +
+        r.discbybonuscard +
+        r.discofsite +
+        r.discbydisccard +
+        r.discbyrecipe +
+        r.discbyakciya
                     as discount,
        r.recipenumber
                     as recipenumber,
