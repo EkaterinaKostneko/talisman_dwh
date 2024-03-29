@@ -16,7 +16,7 @@ default_args = {
     'retries': 0
 }
 
-dag_id = 'load_lpu'
+dag_id = 'load_targets'
 
 # заменить подключение к источнику и поменять схему продюсера на схему источника
 def t_extract_sql(entity):
@@ -47,7 +47,6 @@ with DAG(dag_id, default_args=default_args, schedule_interval='00 16 * * *', cat
 
     t_get_load_params >> \
         t_truncate >> \
-        t_checkpoint >> \
         [t_load_core,
         t_load_mart,
         t_load_mart_pr] >> \
