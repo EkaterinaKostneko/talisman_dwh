@@ -36,7 +36,7 @@ with DAG(dag_id, default_args=default_args, schedule_interval='00 16 * * *', cat
     t_truncate      = run_sql(
                                 script='targets/truncate.sql',
                                 task_id='truncate_stg_dwh')
-    t_checkpoint    = run_sql(script='stub.sql',                            task_id='checkpoint')
+    # t_checkpoint    = run_sql(script='stub.sql',                            task_id='checkpoint')
 
     t_load_core     = run_sql(script='targets/core_targets.sql',            task_id='load_core')
     t_load_mart     = run_sql(script='targets/mart_targets.sql',            task_id='load_mart_targets')
