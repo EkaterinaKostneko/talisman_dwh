@@ -14,11 +14,8 @@ CREATE TABLE marts.mart_targets (
 CREATE TABLE core.targets (
 	idstore     varchar NULL,
 	tdate       date NULL,
-	points      numeric(12, 2) NULL,
-	revenue     numeric(12, 2) NULL,
-	averagebill numeric(12, 2) NULL,
-	markup      numeric(12, 2) NULL,
-	markuplast  numeric(12, 2) NULL
+	nam			int2,
+	val    		numeric(12, 2) NULL
 );
 
 truncate core.targets ;
@@ -27,22 +24,85 @@ insert into core.targets
 (
 select
 	trim(s.objid) idstore,
-	s.date,
- 	(CASE
-		WHEN id = 22956 THEN value::numeric(12,2)
-	END)	averagebill ,
- 	(CASE
-		WHEN id = 22292 THEN value::numeric(12,2)
-	END)	revenue ,
- 	(CASE
-		WHEN id = 24858 THEN value::numeric(12,2)
-	END)	points
+	s.date tdate,
+	s.id nam,
+    value::numeric(12,2) val
 from stg_dwh."_1sconst" s
 where
 	s.id = 22956  --МестаХранения - СреднийЧекПлан
 or  s.id = 22292  --МестаХранения - ВыручкаПлан
 or  s.id = 24858  --МестаХранения - БонусыПлан
+or  s.id = 22845  --МестаХранения - ПроцентНаценки
+union all
+select
+	trim(s.objid) idstore,
+	s.date + interval '1 month' tdate,
+	1 nam,
+    value::numeric(12,2) val
+from stg_dwh."_1sconst" s
+where
+	s.id = 22845  --МестаХранения - ПроцентНаценки
 )
+;
+
+
+
+create or replace view core.targets_step1
+as
+(
+SELECT distinct
+	idstore ,
+	date_trunc('month', tdate) AS mon,
+	nam,
+    last_value(t.val) OVER (PARTITION BY idstore, nam, date_trunc('month', tdate)
+    								ORDER BY idstore, nam, tdate
+    								ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+    								) AS val_per_month
+FROM core.targets t
+)
+
+create or replace view core.targets_step2
+as
+(
+WITH r AS (
+select
+idstore ,
+mon,
+ 	CASE
+		WHEN nam = 22956 THEN val_per_month::numeric(12,2)
+	END	averagebill ,
+ 	CASE
+		WHEN nam = 22292 THEN val_per_month::numeric(12,2)
+	END	revenue ,
+ 	CASE
+		WHEN nam = 24858 THEN val_per_month::numeric(12,2)
+	END	points ,
+    CASE
+        WHEN nam = 22845 THEN val_per_month::numeric(12,2)
+    END	markup ,
+    CASE
+        WHEN nam = 1 THEN val_per_month::numeric(12,2)
+    END	markuplast
+ from core.targets_step1 t
+)
+select
+idstore,
+mon,
+sum(averagebill) averagebill,
+sum(revenue) revenue,
+sum(points) points,
+sum(markup) markup,
+sum(markuplast) markuplast
+from r
+group by idstore,mon
+order by idstore,mon desc
+)
+
+create or replace view core.targets_final
+as
+select *
+from core.targets_step2
+
 
 select
 
@@ -122,5 +182,57 @@ SELECT
     points			"БаллыПлан"
 FROM marts.mart_targets_g
 
+CREATE TABLE core.targets (
+	idstore     varchar NULL,
+	tdate       date NULL,
+	nam			int2,
+	val    		numeric(12, 2) NULL
+);
+
+truncate core.targets ;
+
+insert into core.targets
+(
+select
+	trim(s.objid) idstore,
+	s.date tdate,
+	s.id nam,
+    value::numeric(12,2) val
+from stg_dwh."_1sconst" s
+where
+	s.id = 22956  --МестаХранения - СреднийЧекПлан
+or  s.id = 22292  --МестаХранения - ВыручкаПлан
+or  s.id = 24858  --МестаХранения - БонусыПлан
+or  s.id = 22845  --МестаХранения - ПроцентНаценки
+union all
+select
+	trim(s.objid) idstore,
+	s.date + interval '1 month' tdate,
+	1 nam,
+    value::numeric(12,2) val
+from stg_dwh."_1sconst" s
+where
+	s.id = 22845  --МестаХранения - ПроцентНаценки
+)
+;
+
+truncate core.targets_step1 ;
+
+insert into core.targets_step1
+(
+create or replace view core.targets_step1
+as
+(
+SELECT distinct
+	idstore ,
+	date_trunc('month', tdate) AS month,
+	nam,
+    last_value(t.val) OVER (PARTITION BY idstore, nam, date_trunc('month', tdate)
+    								ORDER BY idstore, nam, tdate desc
+    								ROWS BETWEEN CURRENT ROW AND UNBOUNDED FOLLOWING
+    								) AS nam_per_month
+FROM core.targets t
+)
+;
 
 
