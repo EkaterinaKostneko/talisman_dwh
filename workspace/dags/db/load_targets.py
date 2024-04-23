@@ -36,6 +36,10 @@ with DAG(dag_id, default_args=default_args, schedule_interval='00 16 * * *', cat
     t_truncate      = run_sql(
                                 script='targets/truncate.sql',
                                 task_id='truncate_stg_dwh')
+
+    t_truncate_const = run_sql(
+                                script='truncate_1sconst.sql',
+                                task_id='truncate_const_stg_dwh')
     # t_checkpoint    = run_sql(script='stub.sql',                            task_id='checkpoint')
 
     t_load_core     = run_sql(script='targets/core_targets.sql',            task_id='load_core')
@@ -46,7 +50,8 @@ with DAG(dag_id, default_args=default_args, schedule_interval='00 16 * * *', cat
     t_get_load_params = get_load_params()
 
     t_get_load_params >> \
-        t_truncate >> \
+        [t_truncate, t_truncate_const] >> \
+        t_extract_sql('_1sconst') >> \
         [t_load_core,
         t_load_mart,
         t_load_mart_pr] >> \
