@@ -3,17 +3,22 @@ drop table marts.mart_targets;
 CREATE TABLE marts.mart_targets (
 	idstore varchar NULL,
 	tdate date NULL,
-	points numeric(12, 2) NULL,
-	revenue numeric(12, 2) NULL,
-	averagebill numeric(12, 2) NULL
+	points numeric(12, 2)       NULL,
+	revenue numeric(12, 2)      NULL,
+	averagebill numeric(12, 2)  NULL,
+	markup      numeric(12, 2) NULL,
+	profit      numeric(12, 2) NULL,
+	traffic     numeric(12, 2) NULL
 );
 
 CREATE TABLE core.targets (
-	idstore varchar NULL,
-	tdate date NULL,
-	points numeric(12, 2) NULL,
-	revenue numeric(12, 2) NULL,
-	averagebill numeric(12, 2) NULL
+	idstore     varchar NULL,
+	tdate       date NULL,
+	points      numeric(12, 2) NULL,
+	revenue     numeric(12, 2) NULL,
+	averagebill numeric(12, 2) NULL,
+	markup      numeric(12, 2) NULL,
+	markuplast  numeric(12, 2) NULL
 );
 
 truncate core.targets ;
