@@ -1,0 +1,20 @@
+GRANT SELECT ON TABLE marts.mart_assortiment_pretty TO markdir;
+GRANT SELECT ON TABLE marts.mart_delivery_areas TO markdir;
+GRANT SELECT ON TABLE marts.mart_delivery_couriers TO markdir;
+GRANT SELECT ON TABLE marts.mart_delivery_goods TO markdir;
+GRANT SELECT ON TABLE marts.mart_sprav TO markdir;
+GRANT SELECT ON TABLE marts.sub_assortiment_range TO markdir;
+GRANT SELECT ON TABLE marts.mart_range TO markdir;
+GRANT SELECT ON TABLE marts.mart_orders TO markdir;
+GRANT SELECT ON TABLE marts.mart_margin_projects TO markdir;
+GRANT SELECT ON TABLE marts.mart_total_orders TO markdir;
+
+
+GRANT SELECT ON TABLE marts.mart_range TO komdir;
+GRANT SELECT ON TABLE marts.mart_sprav TO komdir;
+GRANT SELECT ON TABLE marts.sub_assortiment_range TO komdir;
+GRANT SELECT ON TABLE marts.mart_assortiment TO komdir;
+GRANT SELECT ON TABLE marts.mart_assortiment_pretty TO komdir;
+
+
+
