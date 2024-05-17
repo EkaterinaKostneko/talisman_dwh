@@ -33,13 +33,10 @@ def t_extract_sql(entity):
 
 with DAG(dag_id, default_args=default_args, schedule_interval='30 17 * * *', catchup=False, tags=['main']) as dag:
 
-    t_truncate = run_sql(
-        script='truncate_headers.sql',
-        task_id='truncate_stg_dwh')
     t_load_mart = run_sql(script='mart_total_results_by_store.sql', task_id='load_mart')
     t_finish_load = finish_load()
     # t_get_load_id = get_load_id()
     t_get_load_params = get_load_params()
 
-    t_get_load_params >> t_truncate >> [t_extract_sql('check_headers')] >> t_load_mart >> t_finish_load
+    t_get_load_params >> t_load_mart >> t_finish_load
 

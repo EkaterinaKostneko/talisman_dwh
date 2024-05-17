@@ -1,1 +1,0 @@
-TRUNCATE TABLE stg_dwh.checkheaders_inc;

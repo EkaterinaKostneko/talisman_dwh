@@ -29,7 +29,7 @@ SELECT
 	Sum(CheckSum_WithDiscount) as CheckSum_WithDiscount,
 	Sum(IntQuantity) as IntQuantity
 FROM 
-stg_dwh.checkheaders  ch 
+ods.checkheaders  ch
 where
 ch.Status = 1 AND
  (ch.ConsumptionType = 1
