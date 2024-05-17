@@ -7,5 +7,8 @@ SELECT
     idstore     	"ID аптеки",
     averagebill		"СреднийЧекПлан",
     revenue	    	"ВыручкаПлан",
-    points			"БаллыПлан"
+    points			"БаллыПлан",
+    markuplast      "ПроцентНаценки",
+    profit          "ВаловаяПрибыльПлан",
+    traffic         "ПроходимостьПлан"
 FROM marts.mart_targets

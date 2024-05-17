@@ -1,4 +1,4 @@
-DROP VIEW marts.mart_targets;
+DROP VIEW marts.mart_targets cascade;
 
 CREATE OR REPLACE VIEW marts.mart_targets
 AS
@@ -13,7 +13,7 @@ t.revenue               ,
 t.points            ,
 t.markup            ,
 t.markuplast,
-(t.revenue/t.averagebill)::numeric(12,2) traffic
+(t.revenue/NULLIF(t.averagebill,0))::numeric(12,2) traffic
 from core.targets_final t
 join marts.mart_sprav ms
 on t.idstore = ms."ID_Хранение"
