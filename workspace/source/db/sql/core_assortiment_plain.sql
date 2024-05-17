@@ -40,6 +40,7 @@ SELECT
 	DocTabl.SP23196     as manufacture,
 	Doc.SP21205 as kind
 FROM 	stg_dwh.dh21203_retail_reports AS Doc
+--LEFT JOIN ods.dt21203_rr  AS DocTabl
 LEFT JOIN stg_dwh.dt21203_retail_reports  AS DocTabl
 	ON Doc.iddoc = DocTabl.iddoc
 LEFT JOIN core."_1sjourn" AS DocJourn
