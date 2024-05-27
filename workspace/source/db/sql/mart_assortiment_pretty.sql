@@ -10,9 +10,9 @@ SELECT
     revenue-discount-purchase
                 "Валовая прибыль",
     (revenue-discount-purchase)/NULLIF(quantity, 0)
-                 "Цена розничная",
+                 "Приблыль с упаковки",
     purchase/NULLIF(quantity, 0)
-                 "Прибыль с упаковки",
+                 "Цена закупа",
     0
                  "Back маржа",
     purchase/NULLIF(quantity, 0)
