@@ -52,7 +52,7 @@ environment = {
 sql_path = f'/app/ws/source/{config.project_dir}/sql'
 python_path = f'/app/ws/source/{config.project_dir}/python'
 metadata_path = f'/app/ws/metadata/{config.project_dir}'
-share_path = f'/app/ws/share/{config.project_dir}/to_process' 
+share_path = f'/app/ws/share/{config.project_dir}/to_process'
 cache_path = f'/app/ws/cache/{config.project_dir}'
 
 
@@ -92,7 +92,6 @@ def run_sql(script, *, params={}, use_short=False, task_id=None, trigger_rule='a
     )
 
 
-
 def extract_excel(subdir, schema, entity, from_dir, params={}, task_id=None, n_retries=0):
     """ Возвращает таск извлечения данных из файлов Excel (включая csv)
             param: subdir - относительный путь к каталогу метаданных
@@ -113,7 +112,7 @@ def extract_excel(subdir, schema, entity, from_dir, params={}, task_id=None, n_r
         auto_remove=True,
         environment={**environment,
                      **{'AF_DWH_DB_CONNECTION': serialize_connection(config.dwh_db_conn),
-                        'AF_PRODUCER': f'{metadata_path}/{subdir}/{entity}_producer.json', 
+                        'AF_PRODUCER': f'{metadata_path}/{subdir}/{entity}_producer.json',
                         'AF_CONSUMER': f'{metadata_path}/{subdir}/{entity}_consumer.json',
                         'AF_FILEPATH': f'{from_dir}',
                         'AF_DWH_DB_SCHEMA': schema},
@@ -156,7 +155,6 @@ def run_python(script, *, params={}, task_id=None, use_short=False, trigger_rule
         network_mode='host',
         trigger_rule=trigger_rule
     )
-
 
 
 def step(task_id):
@@ -239,6 +237,7 @@ def start_plan(plan_name=None, prev_task_id=None, task_id=None):
         visiology_conn_id=config.visiology_conn
     )
 
+
 def extract_sql(source_conn, subdir, entity, params={}, task_id=None):
     """ Возвращает таск извлечения данных из БД источника в БД хранилища
             param: source_conn - соединение с БД источника
@@ -273,6 +272,7 @@ def extract_sql(source_conn, subdir, entity, params={}, task_id=None):
         mem_limit='4g'
     )
 
+
 def get_inc(task_id=None):
     if not task_id:
         task_id = f'get_inc'
@@ -282,18 +282,4 @@ def get_inc(task_id=None):
             'AF_LOGLEVEL': 'info'
         },
         task_id=task_id
-    )
-
-
-def set_inc(entities_inc, task_id=None, trigger_rule='all_success'):
-    if not task_id:
-        task_id = f'set_inc'
-    return run_python(
-        'set_inc.py',
-        params={
-            'AF_ENTITIES_INC': json.dumps(entities_inc),
-            'AF_LOGLEVEL': 'info'
-        },
-        task_id=task_id,
-        trigger_rule=trigger_rule
     )

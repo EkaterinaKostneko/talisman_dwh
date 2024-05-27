@@ -85,4 +85,4 @@ SELECT
 FROM 	ods.checkheaders    AS Doc
 LEFT JOIN ods.checktables   AS DocTabl
 	ON Doc.ID=DocTabl.CheckID
-where Doc.DocDate between '2024-03-01' and '2024-03-19'
+where Doc.DocDate >= '2023-01-01'
