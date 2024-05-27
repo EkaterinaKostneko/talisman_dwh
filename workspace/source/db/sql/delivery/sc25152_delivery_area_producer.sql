@@ -1,0 +1,10 @@
+SELECT
+    ID,
+    CODE,
+    DESCR,
+    ISMARK,
+    VERSTAMP,
+    SP25154,
+    SP25169,
+    SP25170
+FROM SC25152;

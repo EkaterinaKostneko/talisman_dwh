@@ -1,0 +1,2 @@
+TRUNCATE TABLE stg_dwh.dt21203_rr;
+TRUNCATE TABLE stg_dwh.dh21203_rr;
