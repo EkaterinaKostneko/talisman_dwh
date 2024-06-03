@@ -28,22 +28,40 @@ CREATE TABLE stg_dwh.Consignments  (
 );
 
 
+create table core.sa_purchase_series
+(
+	DocNumber varchar(10) ,
+	DocDate timestamp,
+	Series varchar(30) ,
+	Purchase numeric(12, 2)
+);
+
+
+drop materialized view marts.mv_mart_inventories cascade;
+
 create materialized view marts.mv_mart_inventories
 as
 SELECT
 	PharmCode,
-	DocDate,
+	c.DocDate,
 	Code1C,
 	MfrName,
-	Series,
+	c.Series,
 	ShelfLife,
 	Price,
 	Quantity,
 	VSDQuantity,
 	MarkingFlag,
 	UpdateDate::date UpdateDate,
-    date_part('day', shelflife) - date_part('day', CURRENT_DATE) Days
+    EXTRACT(days FROM AGE(shelflife, CURRENT_DATE)) Days,
+    sps.purchase
 from stg_dwh.consignments c
+left join core.sa_purchase_series sps
+on
+	c.docnumber = sps.docnumber
+	and c.docdate = sps.docdate
+	and c.series = sps.series
+
 
 create or replace view marts.mart_inventories
 as
