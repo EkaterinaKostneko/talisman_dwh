@@ -23,7 +23,7 @@ SELECT
 			WHEN r.TypeOrder = 4 THEN 'АСЗ (Самовывоз)'
 			WHEN r.TypeOrder = 6 THEN 'Семейная-аптека.рф'
 			ELSE 'Не определено'
-		END) AS TypeOrderName,
+		END) AS TypeOrderName,t
 		r.orderquantity AS "Количество", 
 		r.sallingsum AS "Оборот", 
 		r.purchasesum AS "Себестоимость",

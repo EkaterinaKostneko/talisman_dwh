@@ -10,12 +10,13 @@ SELECT
     revenue-discount-purchase
                 "Валовая прибыль",
     (revenue-discount-purchase)/NULLIF(quantity, 0)
-                 "Приблыль с упаковки",
+                 "Прибыль с упаковки",
     purchase/NULLIF(quantity, 0)
                  "Цена закупа",
     0
-                 "Back маржа",
-    purchase/NULLIF(quantity, 0)
-                "Общая прибыль с упаковки"
+                 "Back маржа"
+--                 ,
+--    purchase/NULLIF(quantity, 0)
+--                "Общая прибыль с упаковки"
 FROM core.assortiment_final af
 

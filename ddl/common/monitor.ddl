@@ -1,4 +1,4 @@
-drop view marts.latest ;
+drop view if exists marts.latest ;
 
 create or replace view marts.latest
 as
