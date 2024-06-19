@@ -277,7 +277,7 @@ def get_inc(task_id=None):
     if not task_id:
         task_id = f'get_inc'
     return run_python(
-        'get_inc.py',
+        'inc_all.py',
         params={
             'AF_LOGLEVEL': 'info'
         },
@@ -285,15 +285,15 @@ def get_inc(task_id=None):
     )
 
 
-def set_inc(entities_inc, task_id=None, trigger_rule='all_success'):
-    if not task_id:
-        task_id = f'set_inc'
-    return run_python(
-        'set_inc.py',
-        params={
-            'AF_ENTITIES_INC': json.dumps(entities_inc),
-            'AF_LOGLEVEL': 'info'
-        },
-        task_id=task_id,
-        trigger_rule=trigger_rule
-    )
+# def set_inc(entities_inc, task_id=None, trigger_rule='all_success'):
+#     if not task_id:
+#         task_id = f'set_inc'
+#     return run_python(
+#         'set_inc.py',
+#         params={
+#             'AF_ENTITIES_INC': json.dumps(entities_inc),
+#             'AF_LOGLEVEL': 'info'
+#         },
+#         task_id=task_id,
+#         trigger_rule=trigger_rule
+#     )

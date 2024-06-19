@@ -31,7 +31,7 @@ def t_extract_sql(entity):
     )
 
 
-with DAG(dag_id, default_args=default_args, schedule_interval='00 18 * * *', catchup=False, tags=['main']) as dag:
+with DAG(dag_id, default_args=default_args, schedule_interval='00 22 * * *', catchup=False, tags=['main']) as dag:
 
     t_truncate      = run_sql(
                                 script='lpu/truncate_lpu.sql',

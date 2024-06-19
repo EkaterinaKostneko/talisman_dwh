@@ -29,7 +29,7 @@ def t_extract_sql(entity):
     )
 
 
-with DAG(dag_id, default_args=default_args, schedule_interval='0 2 * * *', catchup=False,
+with DAG(dag_id, default_args=default_args, schedule_interval='0 19 * * *', catchup=False,
          tags=['main'], params={'dt_inc_begin': None, 'dt_inc_end': None}) as dag:
 
     t_truncate = run_sql(script='/orders/orders_truncate.sql', task_id='truncate_stg')

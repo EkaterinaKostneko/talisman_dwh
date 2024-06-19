@@ -28,7 +28,7 @@ def t_extract_sql(entity):
     )
 
 
-with DAG(dag_id, default_args=default_args, schedule_interval='50 19 * * *', catchup=False, tags=['main']) as dag:
+with DAG(dag_id, default_args=default_args, schedule_interval='00 22 * * *', catchup=False, tags=['main']) as dag:
 
     t_truncate = run_sql(script='/delivery/truncate_delivery.sql', task_id='truncate_stg')
     t_load_mart = step('load_mart')

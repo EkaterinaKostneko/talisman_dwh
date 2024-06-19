@@ -1,6 +1,6 @@
-truncate table marts.mart_total_results_by_store;
+truncate table marts.mart_total_results_by_store_hot;
 
-insert into marts.mart_total_results_by_store(
+insert into marts.mart_total_results_by_store_hot(
 	DocDate ,
 	PharmacyCode ,
 	turnover ,
@@ -29,7 +29,7 @@ SELECT
 	Sum(CheckSum_WithDiscount) as CheckSum_WithDiscount,
 	Sum(IntQuantity) as IntQuantity
 FROM 
-ods.checkheaders  ch
+stg_dwh.act_checkheaders  ch
 where
 ch.Status = 1 AND
  (ch.ConsumptionType = 1

@@ -17,20 +17,20 @@ SELECT
 		WHEN ((POSITION(';' IN alHead.RecipeNumber)-1)= 4) OR (((POSITION(';' IN alHead.RecipeNumber)-1)= 8) AND (SUBSTRING(alHead.RecipeNumber, 1, 1)= '3')) THEN 4
 		ELSE (POSITION(';' IN alHead.RecipeNumber)-1)
 	END) AS TypeOrder,
-	(CASE  
-		WHEN (TRIM(alHead.RecipeNumber)='') THEN 0 
-		ELSE 1 
+	(CASE
+		WHEN (TRIM(alHead.RecipeNumber)='') THEN 0
+		ELSE 1
 	END) AS OnLineSale ,
 	COUNT(DISTINCT(alHead.ID)) AS OrderQuantity,
 	SUM(totalsum)-SUM(DiscountSum) AS SallingSum,
 	SUM(checksum_purchase) AS PurchaseSum
 FROM
-	ods.CheckHeaders AS alHead
+	stg_dwh.act_checkheaders AS alHead
 WHERE
 	alHead.Status = 1
-	AND alHead.WriteOffType is not null 
-	AND alHead.totalsum>0 
-	AND alHead.checksum_purchase>0 
+	AND alHead.WriteOffType is not null
+	AND alHead.totalsum>0
+	AND alHead.checksum_purchase>0
 	GROUP BY
 		alHead.DocDate,
 		PharmacyCode,
@@ -39,7 +39,7 @@ WHERE
 			WHEN ((POSITION(';' IN alHead.RecipeNumber)-1)= 4) OR (((POSITION(';' IN alHead.RecipeNumber)-1)= 8) AND (SUBSTRING(alHead.RecipeNumber, 1, 1)= '3')) THEN 4
 			ELSE (POSITION(';' IN alHead.RecipeNumber)-1)
 		END),
-		(CASE 
+		(CASE
 		  WHEN (TRIM(alHead.RecipeNumber)='') THEN 0
 		  ELSE 1
 		END);
@@ -69,12 +69,53 @@ SELECT
 			WHEN r.TypeOrder = 4 THEN 'АСЗ (Самовывоз)'
 			WHEN r.TypeOrder = 6 THEN 'Семейная-аптека.рф'
 			ELSE 'Не определено'
-		END) AS TypeOrderName,t
+		END) AS TypeOrderName,
 		r.orderquantity AS "Количество",
 		r.sallingsum AS "Оборот",
 		r.purchasesum AS "Себестоимость",
 		(r.sallingSum - r.purchaseSum)/ NULLIF(r.purchaseSum, 0) * 100 AS "Наценка"
-FROM ods.margin_projects  r
+FROM core.act_margin_projects  r
 LEFT JOIN marts.mart_sprav s
 ON r.pharmacycode = TRIM(s.МестоХран)
 WHERE s."ID_Контрагенты" is not null ;
+
+truncate table marts.mart_total_results_by_store_hot;
+
+insert into marts.mart_total_results_by_store_hot(
+	DocDate ,
+	PharmacyCode ,
+	turnover ,
+	quanity,
+	TotalSum  ,
+	BonusesSum  ,
+	DiscountSum  ,
+	IndividualDiscountSum ,
+	Coupon ,
+	CheckSum_Purchase ,
+	CheckSum_Selling ,
+	CheckSum_WithDiscount,
+	IntQuantity)
+SELECT
+	DocDate ,
+	PharmacyCode,
+	Sum(CheckSum_Selling)-Sum(DiscountSum) as turnover,
+	count(distinct DocNumber) as quanity,
+	Sum(TotalSum) as TotalSum,
+	Sum(BonusesSum) as BonusesSum,
+	Sum(DiscountSum) as DiscountSum,
+	Sum(IndividualDiscountSum) as IndividualDiscountSum,
+	Sum(Coupon) as Coupon,
+	Sum(CheckSum_Purchase) as CheckSum_Purchase,
+	Sum(CheckSum_Selling) as CheckSum_Selling,
+	Sum(CheckSum_WithDiscount) as CheckSum_WithDiscount,
+	Sum(IntQuantity) as IntQuantity
+FROM
+stg_dwh.act_checkheaders  ch
+where
+ch.Status = 1 AND
+ (ch.ConsumptionType = 1
+    OR ch.ConsumptionType = 4
+    OR ch.ConsumptionType = 8) AND
+ ch.WriteOffFlag = 0
+group by DocDate,
+PharmacyCode

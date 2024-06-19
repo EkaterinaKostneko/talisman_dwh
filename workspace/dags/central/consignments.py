@@ -31,7 +31,7 @@ def t_extract_sql(entity):
     )
 
 
-with DAG(dag_id, default_args=default_args, schedule_interval='0 3 * * *', catchup=False, tags=['main','central']) as dag:
+with DAG(dag_id, default_args=default_args, schedule_interval='30 18 * * *', catchup=False, tags=['main','central']) as dag:
 
     t_truncate = run_sql(
         script='inventories/truncate.sql',
