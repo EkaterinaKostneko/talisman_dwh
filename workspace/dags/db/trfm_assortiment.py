@@ -54,10 +54,11 @@ with DAG(dag_id, default_args=default_args, schedule_interval='0 20 * * *', catc
     t_trfm_final    = run_sql(script='trfm_assortiment_final.sql',     task_id='trfm_final')
     t_mart          = run_sql(script='mart_assortiment.sql',           task_id='mart_sales')
     t_mart_pretty   = run_sql(script='mart_assortiment_pretty.sql',    task_id='mart_sales_pretty')
+    t_mart_range    = run_sql(script='mart_assortiment_range.sql',     task_id='mart_range')
 
-    t_get_load_params = get_load_params()
+  t_get_load_params = get_load_params()
 
 
 t_get_load_params >> t_trfm_core >> t_trfm_step1 >> \
 [t_trfm_step2, t_trfm_step3] >> t_trfm_step4 >> t_trfm_final >> \
-[t_mart, t_mart_pretty] >> t_finish_load
+[t_mart, t_mart_pretty, t_mart_range] >> t_finish_load

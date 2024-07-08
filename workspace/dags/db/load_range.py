@@ -41,5 +41,12 @@ with DAG(dag_id, default_args=default_args, schedule_interval='15 19 * * *', cat
     # t_get_load_id = get_load_id()
     t_get_load_params = get_load_params()
 
-    t_get_load_params >> t_truncate >> [t_extract_sql('sc156_range'), t_extract_sql('sc25892_product_groups'), t_extract_sql('sc25148_economic_groups'), t_extract_sql('sc25097_product_categories'), t_extract_sql('sc23072_mnn_directory')] >> t_load_mart >> t_finish_load
+    t_get_load_params >> t_truncate >> \
+    [t_extract_sql('sc156_range'),
+     t_extract_sql('sc25892_product_groups'),
+     t_extract_sql('sc25148_economic_groups'),
+     t_extract_sql('sc25097_product_categories'),
+     t_extract_sql('sc23072_mnn_directory')] >> \
+    t_load_mart >> \
+    t_finish_load
 

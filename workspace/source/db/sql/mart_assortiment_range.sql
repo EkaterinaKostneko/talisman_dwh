@@ -1,6 +1,6 @@
-TRUNCATE TABLE core.sub_assortiment_range;
+TRUNCATE TABLE marts.sub_assortiment_range;
 
-INSERT INTO core.sub_assortiment_range
+INSERT INTO marts.sub_assortiment_range
 (
 id,
 parentid,
