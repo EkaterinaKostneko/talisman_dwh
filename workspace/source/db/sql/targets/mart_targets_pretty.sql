@@ -16,9 +16,3 @@ SELECT
     traffic         "ПроходимостьПлан"
 FROM marts.mart_targets
 
-
-
-
-    Витрину mart_targets_pretty прошу дополнить полями из mart_targets:
-    второй вариант id аптеки (pharmacy),
-    название аптеки (address) и наценка фактическая (markup).
