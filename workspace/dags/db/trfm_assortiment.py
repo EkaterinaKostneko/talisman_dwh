@@ -56,7 +56,7 @@ with DAG(dag_id, default_args=default_args, schedule_interval='0 20 * * *', catc
     t_mart_pretty   = run_sql(script='mart_assortiment_pretty.sql',    task_id='mart_sales_pretty')
     t_mart_range    = run_sql(script='mart_assortiment_range.sql',     task_id='mart_range')
 
-  t_get_load_params = get_load_params()
+    t_get_load_params = get_load_params()
 
 
 t_get_load_params >> t_trfm_core >> t_trfm_step1 >> \
