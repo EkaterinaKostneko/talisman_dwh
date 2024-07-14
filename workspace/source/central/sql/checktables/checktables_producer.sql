@@ -28,7 +28,7 @@ SELECT
 	DiscByBonusCard,
 	DiscByAkciya,
 	VSDQuantity,
-	EconomicGroupCode
+	EconomicGroupCode,
 	GrossProfitSum ,
     SalesChannel ,
     OrderNumber ,

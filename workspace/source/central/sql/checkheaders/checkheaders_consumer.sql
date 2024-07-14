@@ -55,6 +55,10 @@ INSERT INTO stg_dwh.checkheaders_inc(
  DMS_PolicyNumber,
  IntQuantity,
  SBPOrderID,
- ChangeFlag
+ ChangeFlag,
+ AppNumber,
+ CheckID,
+ DeliveryFlag,
+ EmpPointsForCash
 )
 VALUES %s;
