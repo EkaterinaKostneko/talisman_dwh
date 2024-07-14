@@ -29,6 +29,15 @@ SELECT
 	DiscByAkciya,
 	VSDQuantity,
 	EconomicGroupCode
+	GrossProfitSum ,
+    SalesChannel ,
+    OrderNumber ,
+    DiscountsAsStr ,
+    Sk_Akciya ,
+    Sk_Zakaz ,
+    Sk_Recept ,
+    Sk_Bonus ,
+    Sk_Okr 
 FROM
 	[Central].[dbo].[CheckTables]
 WHERE DateTime between cast('{{ AF_INC_BEGIN }}' as DATETIME2) and cast('{{ AF_INC_END }}' as DATETIME2)

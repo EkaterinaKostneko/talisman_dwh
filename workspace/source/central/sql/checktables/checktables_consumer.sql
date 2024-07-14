@@ -28,6 +28,15 @@ INSERT INTO stg_dwh.checktables_inc (
 	DiscByBonusCard,
 	DiscByAkciya,
 	VSDQuantity,
-	EconomicGroupCode
+	EconomicGroupCode,
+    GrossProfitSum ,
+    SalesChannel ,
+    OrderNumber ,
+    DiscountsAsStr ,
+    Sk_Akciya ,
+    Sk_Zakaz ,
+    Sk_Recept ,
+    Sk_Bonus ,
+    Sk_Okr
 	)
 VALUES %s;
