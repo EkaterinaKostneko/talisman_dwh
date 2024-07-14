@@ -38,9 +38,9 @@ Sum(ct.Sum-(ct.Sk_Akciya+ct.Sk_Zakaz+ct.Sk_Recept+ct.Sk_Bonus+ct.Sk_Okr) - ct.Pu
 --ct.PurchasePrice*ct.SellingPrice/ct.Price as PurchasePrice1,
 -- закупочная стоимость общая
 Sum(ct.PurchasePrice*ct.SellingPrice/ct.Price*(ct.IntQuantity+ct.FracQuantity)) PurchaseSum
-from stg_dwh.act_checktables ct
+from ods.checktables ct
 join
-stg_dwh.act_CheckHeaders ch
+ods.CheckHeaders ch
 on ch.ID = ct.CheckID
 where Status = 1
 	AND (ConsumptionType = 1 OR ConsumptionType = 4)
@@ -51,7 +51,6 @@ group by
 	ch.pharmacycode ,
 	ct.SalesChannel,
 	ch.DocDate
-
 	;
 
 
