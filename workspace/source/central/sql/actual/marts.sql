@@ -120,5 +120,3 @@ ch.Status = 1 AND
 group by DocDate,
 PharmacyCode
 ;
-
-refresh materialized view marts.latest ;

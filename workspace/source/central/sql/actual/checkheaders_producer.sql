@@ -58,5 +58,5 @@ SELECT
  ChangeFlag
 FROM 
 	[Central].[dbo].[CheckHeaders]
-WHERE DocDate >= DATEADD(WEEK, -2, GETDATE())
+WHERE DocDate >= DATEADD(MONTH, -1, GETDATE())
 ;
