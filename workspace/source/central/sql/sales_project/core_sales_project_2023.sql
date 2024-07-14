@@ -1,6 +1,6 @@
-drop materialized view if exists ods.sales_projects cascade;
+drop materialized view if exists ods.sales_projects_2023;
 
-create materialized view ods.sales_projects
+create materialized view ods.sales_projects_2023
 as
 SELECT
 --ct.CheckID,
@@ -38,36 +38,18 @@ Sum(ct.Sum-(ct.Sk_Akciya+ct.Sk_Zakaz+ct.Sk_Recept+ct.Sk_Bonus+ct.Sk_Okr) - ct.Pu
 --ct.PurchasePrice*ct.SellingPrice/ct.Price as PurchasePrice1,
 -- закупочная стоимость общая
 Sum(ct.PurchasePrice*ct.SellingPrice/ct.Price*(ct.IntQuantity+ct.FracQuantity)) PurchaseSum
-from stg_dwh.act_checktables ct
+from ods.checktables  ct
 join
-stg_dwh.act_CheckHeaders ch
+ods.CheckHeaders ch
 on ch.ID = ct.CheckID
 where Status = 1
 	AND (ConsumptionType = 1 OR ConsumptionType = 4)
 	AND WriteOffFlag = 0
 	AND ct.FracQuantity > '0'
---	and ch.DocDate between '2024-06-01' and '2024-06-30'
+	and ch.DocDate between '2023-01-01' and '2023-12-31'
 group by
 	ch.pharmacycode ,
 	ct.SalesChannel,
 	ch.DocDate
 
-	;
 
-
-drop view if exists marts.mart_sales_projects;
-
-create view marts.mart_sales_projects
-as
-select
-*,
--- канал продаж
-(case
- when sp.IDSalesChannel = '0' then 'Офлайн'
- when sp.IDSalesChannel = '1' then 'ТвояАптека.рф'
- when sp.IDSalesChannel = '4' then 'АСЗ'
- when sp.IDSalesChannel = '2' then 'Семейная-аптека.рф'
- else 'Заказ с другой аптеки'
-end) as SalesChannel,
-(sp.Revenue - sp.PurchaseSum)/ NULLIF(sp.PurchaseSum, 0) Margin
-from ods.sales_projects sp
