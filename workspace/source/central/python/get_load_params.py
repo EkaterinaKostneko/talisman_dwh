@@ -41,15 +41,16 @@ def run():
     execution_date = getenv('AF_EXECUTION_DATE')
     start_date = getenv('AF_START_DATE')
     dwh_db_connection = getenv('AF_DWH_DB_CONNECTION')
-    # source_system = getenv('AF_SOURCE_SYSTEM')
-    # stage = getenv('AF_STAGE')
-    # parent_load_id = getenv('AF_PARENT_LOAD_ID') if getenv('AF_PARENT_LOAD_ID') else None
+    source_system = getenv('AF_SOURCE_SYSTEM')
+    stage = getenv('AF_STAGE')
+    parent_load_id = getenv('AF_PARENT_LOAD_ID') if getenv('AF_PARENT_LOAD_ID') else None
     sd_date_begin = getenv('AF_SD_DATE_BEGIN')
     sd_date_end = getenv('AF_SD_DATE_END')
     min_load_date = getenv('AF_MIN_LOAD_DATE')
 
     logger.info(f'AF_DAG_ID={dag_id}, AF_RUN_ID={run_id}, AF_EXECUTION_DATE={execution_date}, '
-                # f'AF_START_DATE={start_date}, AF_SD_DATE_BEGIN={sd_date_begin}, AF_SD_DATE_END={sd_date_end}, '
+                f'AF_SOURCE_SYSTEM={source_system}, AF_STAGE={stage}, AF_PARENT_LOAD_ID={parent_load_id}, '
+                f'AF_START_DATE={start_date}, AF_SD_DATE_BEGIN={sd_date_begin}, AF_SD_DATE_END={sd_date_end}, '
                 f'AF_MIN_LOAD_DATE={min_load_date}')
 
     connection = get_decoded_connection(dwh_db_connection)
@@ -65,7 +66,7 @@ def run():
                 create schema if not exists sys;
                 create table if not exists sys."load" (
                     id serial NOT NULL,
-                    parent_id text NULL,
+                    parent_id int4 NULL,
                     dag_id text NOT NULL,
                     run_id text NOT NULL,
                     dt_execution timestamp NOT NULL,
@@ -95,7 +96,7 @@ def run():
                         and is_complete
                     )
                     select 
-                        'NULL' as parent_id, 
+                        %s as parent_id, 
                         %s as dag_id, 
                         %s as run_id, 
                         %s as dt_execution, 
@@ -109,7 +110,7 @@ def run():
                 sd_date_end = utc_str_to_local_date(start_date, airflow_pattern)
                 logger.info(sd_date_end)
                 cursor.execute(sql_insert,
-                               (dag_id, sd_date_end, dag_id, run_id, execution_date, start_date,
+                               (dag_id, sd_date_end, parent_load_id, dag_id, run_id, execution_date, start_date,
                                 sd_date_end, min_load_date))
                 record = cursor.fetchone()
 
@@ -133,9 +134,9 @@ def run():
                     insert into sys.load (
                         parent_id, dag_id, run_id, dt_execution, dt_start, dt_begin, dt_end, source_system, stage
                     )
-                    values ('NULL', %s, %s, %s, %s, %s, %s, %s, %s) 
+                    values (%s, %s, %s, %s, %s, %s, %s, %s, %s) 
                     returning id, dt_begin, dt_end;'''
-                cursor.execute(sql_insert, (dag_id, run_id, execution_date, start_date, sd_date_begin,
+                cursor.execute(sql_insert, (parent_load_id, dag_id, run_id, execution_date, start_date, sd_date_begin,
                                             sd_date_end if sd_date_end else utc_str_to_local_date(start_date,
                                                                                                   airflow_pattern),
                                             source_system, stage))
@@ -147,7 +148,7 @@ def run():
 
     # print(f'{load_id};{dt_begin};{dt_end};{stage};{source_system}')
     # context_push(f'{load_id};{dt_begin};{dt_end};{stage};{source_system}')
-    context_push(value =load_id)
+    context_push(value =load_id)   
 
 if __name__ == '__main__':
     run()

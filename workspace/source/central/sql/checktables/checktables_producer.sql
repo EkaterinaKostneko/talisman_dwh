@@ -1,0 +1,35 @@
+SELECT
+	ID,
+	DateTime,
+	CheckID,
+	TovarCode1C,
+	TovarName,
+	DocType,
+	DocNumber,
+	DocDate,
+	ProCode,
+	ProName,
+	ProAsString,
+	Series,
+	ShelfLife,
+	Price,
+	PurchasePrice,
+	SellingPrice,
+	DiscountPrice,
+	IntQuantity,
+	FracQuantity,
+	Sum,
+	Discount,
+	Akciya,
+	Coupon,
+	DiscByDiscCard,
+	DiscOfSite,
+	DiscByRecipe,
+	DiscByBonusCard,
+	DiscByAkciya,
+	VSDQuantity,
+	EconomicGroupCode
+FROM
+	[Central].[dbo].[CheckTables]
+WHERE DateTime between cast('{{ AF_INC_BEGIN }}' as DATETIME2) and cast('{{ AF_INC_END }}' as DATETIME2)
+;
