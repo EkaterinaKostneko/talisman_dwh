@@ -44,6 +44,6 @@ with DAG(dag_id, default_args=default_args, schedule_interval='30 22 * * *', cat
 
 
     t_get_load_params >> t_truncate >> \
-    [t_extract_sql('checkheaders_chs'),t_extract_sql('checktables_chs')]  >> \
+    [t_extract_sql('checkheaders_chs')]  >> \
     t_load_mart >> t_finish_load
 
