@@ -8,7 +8,7 @@ SELECT
 FROM
 	[Central].[dbo].[CheckHeaders]
 WHERE
-	DocDate > '01.01.2024'
+	DocDate > '01.08.2024'
 GROUP BY
 DocDate,
 CAST([DateTime] AS Date)
