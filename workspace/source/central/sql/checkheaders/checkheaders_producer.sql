@@ -62,5 +62,6 @@ SELECT
      EmpPointsForCash
 FROM
 	[Central].[dbo].[CheckHeaders]
-WHERE [DateTime] between cast('{{ AF_INC_BEGIN }}' as DATETIME2) and cast('{{ AF_INC_END }}' as DATETIME2)
+--WHERE [DateTime] between cast('{{ AF_INC_BEGIN }}' as DATETIME2) and cast('{{ AF_INC_END }}' as DATETIME2)
+WHERE DocDate between cast('{{ AF_INC_BEGIN }}' as DATETIME2) and cast('{{ AF_INC_END }}' as DATETIME2)
 ;

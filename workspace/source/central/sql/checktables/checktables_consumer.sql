@@ -1,4 +1,5 @@
 INSERT INTO stg_dwh.checktables_inc (
+--INSERT INTO ods.checktables (
 	ID,
 	DateTime,
 	CheckID,

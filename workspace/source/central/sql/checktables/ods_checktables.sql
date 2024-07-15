@@ -1,5 +1,5 @@
 delete from ods.checktables
-where DateTime between '{{ AF_INC_BEGIN }}' and '{{ AF_INC_END }}';
+where DocDate between '{{ AF_INC_BEGIN }}' and '{{ AF_INC_END }}';
 
 INSERT INTO ods.checktables
 (

@@ -40,5 +40,6 @@ SELECT
     Sk_Okr 
 FROM
 	[Central].[dbo].[CheckTables]
-WHERE DateTime between cast('{{ AF_INC_BEGIN }}' as DATETIME2) and cast('{{ AF_INC_END }}' as DATETIME2)
+WHERE DocDate between cast('{{ AF_INC_BEGIN }}' as DATETIME2) and cast('{{ AF_INC_END }}' as DATETIME2)
+--WHERE DocDate >= '2023-01-01'
 ;

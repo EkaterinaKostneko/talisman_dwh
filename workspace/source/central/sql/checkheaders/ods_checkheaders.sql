@@ -1,5 +1,6 @@
 delete from ods.checkheaders
-where datetime between '{{ AF_INC_BEGIN }}' and '{{ AF_INC_END }}';
+--where datetime between '{{ AF_INC_BEGIN }}' and '{{ AF_INC_END }}';
+where docdate between '{{ AF_INC_BEGIN }}' and '{{ AF_INC_END }}';
 
 INSERT INTO ods.checkheaders
 (
