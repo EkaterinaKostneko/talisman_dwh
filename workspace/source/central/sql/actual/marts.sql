@@ -94,29 +94,37 @@ insert into marts.mart_total_results_by_store_hot(
 	CheckSum_Purchase ,
 	CheckSum_Selling ,
 	CheckSum_WithDiscount,
-	IntQuantity)
+	IntQuantity,
+	FracQuantity,
+	GrossProfit)
 SELECT
-	DocDate ,
+	ch.DocDate ,
 	PharmacyCode,
-	Sum(CheckSum_Selling)-Sum(DiscountSum) as turnover,
-	count(distinct DocNumber) as quanity,
-	Sum(TotalSum) as TotalSum,
-	Sum(BonusesSum) as BonusesSum,
-	Sum(DiscountSum) as DiscountSum,
-	Sum(IndividualDiscountSum) as IndividualDiscountSum,
-	Sum(Coupon) as Coupon,
-	Sum(CheckSum_Purchase) as CheckSum_Purchase,
-	Sum(CheckSum_Selling) as CheckSum_Selling,
-	Sum(CheckSum_WithDiscount) as CheckSum_WithDiscount,
-	Sum(IntQuantity) as IntQuantity
+	Sum(TotalSum)-Sum(DiscountSum)   		as turnover,
+	count(distinct ch.DocNumber)            as quanity,
+	Sum(TotalSum)                           as TotalSum,
+	Sum(BonusesSum)                         as BonusesSum,
+	Sum(DiscountSum)                        as DiscountSum,
+	Sum(IndividualDiscountSum)              as IndividualDiscountSum,
+	Sum(ch.Coupon)                          as Coupon,
+	Sum(CheckSum_Purchase)                  as CheckSum_Purchase,
+	Sum(CheckSum_Selling)                   as CheckSum_Selling,
+	Sum(CheckSum_WithDiscount)              as CheckSum_WithDiscount,
+	Sum(ch.IntQuantity)                     as IntQuantity,
+	Sum(FracQuantity)                       as FracQuantity,
+    Sum(ct.grossprofitsum)                  as GrossProfit
 FROM
 stg_dwh.act_checkheaders  ch
+join
+stg_dwh.act_checktables ct
+on ch.id = ct.checkid
 where
 ch.Status = 1 AND
  (ch.ConsumptionType = 1
     OR ch.ConsumptionType = 4
     OR ch.ConsumptionType = 8) AND
  ch.WriteOffFlag = 0
-group by DocDate,
+--and ch.DocDate between '01.07.2024' and '01.07.2024'
+group by ch.DocDate,
 PharmacyCode
 ;

@@ -39,7 +39,9 @@ CREATE TABLE marts.mart_total_results_by_store_hot (
 	checksum_purchase numeric(12, 4) NULL,
 	checksum_selling numeric(12, 4) NULL,
 	checksum_withdiscount numeric(12, 4) NULL,
-	intquantity numeric(12, 4) NULL
+	intquantity numeric(12, 4) NULL,
+    FracQuantity int4,
+    GrossProfit numeric(12,2)
 );
 
 GRANT TRIGGER, REFERENCES, TRUNCATE, INSERT, DELETE, UPDATE, SELECT ON TABLE marts.mart_total_results_by_store_hot TO apteka;

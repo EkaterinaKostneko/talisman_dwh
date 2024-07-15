@@ -33,7 +33,7 @@ def t_extract_sql(entity):
 
 with DAG(dag_id, default_args=default_args, schedule_interval='00 22 * * *', catchup=False, tags=['main']) as dag:
 
-    t_load_mart = run_sql(script='mart_total_results_by_store.sql', task_id='load_mart')
+    t_load_mart = run_sql(script='total_results_by_store/mart_total_results_by_store.sql', task_id='load_mart')
     t_finish_load = finish_load()
     # t_get_load_id = get_load_id()
     t_get_load_params = get_load_params()
